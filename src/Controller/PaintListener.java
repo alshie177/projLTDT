@@ -139,13 +139,11 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 		case "delVertex": {
 			try {
 				if (isFocus && paintPanel.getGraph().getVertexs().size() > 0) {
-//					System.out.println(indexFocus);
 					paintPanel.delVertex(vertexFocus);
 					paintPanel.repaint();
 					isFocus = false;
 					indexFocus = 0;
-//					paintPanel.setTypeButtonString("");
-//					break;
+					paintPanel.setTypeButtonString("");
 				}
 			} catch (Exception ex) {
 				throw ex;

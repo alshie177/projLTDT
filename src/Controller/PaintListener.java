@@ -67,11 +67,12 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 		}
 		case "addEdge": {
 			for (int i = 0; i < paintPanel.getGraph().getVertexs().size(); i++) {
-				if (paintPanel.getGraph().getVertexs().get(i).getEllipse().intersects(e.getX(), e.getY(), 1, 1)) {
+				if (paintPanel.getGraph().getVertexs().get(i).getEllipse().contains(e.getX(), e.getY())) {
 					System.out.println("Started");
 					if (paintPanel.getSelected1() == null) {
 						paintPanel.setSelected1(paintPanel.getGraph().getVertexs().get(i));
 						System.out.println("s1 A");
+						isFocus = false;
 						return;
 					} else {
 						if (paintPanel.getSelected1() != paintPanel.getSelected2()) {

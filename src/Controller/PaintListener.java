@@ -13,6 +13,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Ellipse2D.Double;
@@ -29,9 +30,13 @@ import model.Vertex;
 import view.ArrowHead;
 import view.PaintPanel;
 
-public class PaintListener implements MouseListener {
+public class PaintListener implements MouseListener, MouseMotionListener {
 	private PaintPanel paintPanel;
 	private Font font;
+	boolean isFocus = false;
+	int indexFocus = 0;
+	Vertex vertexFocus;
+	Ellipse2D ellipse;
 
 	public PaintListener(PaintPanel paintPanel) {
 		super();
@@ -40,7 +45,7 @@ public class PaintListener implements MouseListener {
 		paintPanel.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent event) {
-				Component srComponent= (Component) event.getSource();
+				Component srComponent = (Component) event.getSource();
 				srComponent.requestFocus();
 			}
 		});
@@ -51,16 +56,18 @@ public class PaintListener implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		switch (paintPanel.getTypeButtonString()) {
 		case "addVertex": {
-			Ellipse2D ellipse = new Ellipse2D.Double(e.getX(), e.getY(), 50, 50);
+			ellipse = new Ellipse2D.Double(e.getX(), e.getY(), 50, 50);
 			paintPanel.getGraph().addVertex(ellipse);
-			System.out.println("2");
+//			System.out.println("2");
 			paintPanel.setTypeButtonString("");
 			paintPanel.repaint();
+			paintPanel.getGraph().showVertex();
+			isFocus = false;
 			break;
 		}
 		case "addEdge": {
 			for (int i = 0; i < paintPanel.getGraph().getVertexs().size(); i++) {
-				if (paintPanel.getGraph().getVertexs().get(i).getEllipse().intersects(e.getX(), e.getY(), 50, 50)) {
+				if (paintPanel.getGraph().getVertexs().get(i).getEllipse().intersects(e.getX(), e.getY(), 1, 1)) {
 					System.out.println("Started");
 					if (paintPanel.getSelected1() == null) {
 						paintPanel.setSelected1(paintPanel.getGraph().getVertexs().get(i));
@@ -71,6 +78,7 @@ public class PaintListener implements MouseListener {
 							paintPanel.setSelected2(paintPanel.getGraph().getVertexs().get(i));
 							System.out.println("s2 A");
 							if (paintPanel.isUndirecred() == true) {
+								System.out.println("add Edge");
 								double from = paintPanel.angleBetween(paintPanel.getSelected1(),
 										paintPanel.getSelected2());
 								double to = paintPanel.angleBetween(paintPanel.getSelected1(),
@@ -84,8 +92,11 @@ public class PaintListener implements MouseListener {
 										paintPanel.getSelected2(), line2d);
 								paintPanel.setSelected1(null);
 								paintPanel.setSelected2(null);
+								isFocus = false;
+								indexFocus = 0;
 								paintPanel.setTypeButtonString("");
 								System.out.println("Edge is available");
+								paintPanel.getGraph().showEdge();
 								paintPanel.repaint();
 								break;
 							}
@@ -101,6 +112,8 @@ public class PaintListener implements MouseListener {
 								Line2D line2d = new Line2D.Double(pointFromPoint2d, pointToPoint2d);
 								paintPanel.getGraph().addDerectedEdge(paintPanel.getSelected1(),
 										paintPanel.getSelected2(), line2d);
+								isFocus = false;
+								indexFocus = 0;
 								paintPanel.setSelected1(null);
 								paintPanel.setSelected2(null);
 								paintPanel.setTypeButtonString("");
@@ -123,18 +136,23 @@ public class PaintListener implements MouseListener {
 			}
 			break;
 		}
-//		case "delVertex": {
-//			for (int i = 0; i < paintPanel.getGraph().getVertexs().size(); i++) {
-//				if (paintPanel.getGraph().getVertexs().get(i).getEllipse().intersects(e.getX(), e.getY(), 20, 20)) {
-//					paintPanel.setSelected1(paintPanel.getGraph().getVertexs().get(i));
-//					paintPanel.getGraph().getVertexs().remove(paintPanel.getSelected1());
-//					paintPanel.repaint();
-//				}
-//				paintPanel.setSelected1(null);
-//				paintPanel.setTypeButtonString("");
-//			}
-//			break;
-//		}
+		case "delVertex": {
+			try {
+				if (isFocus && paintPanel.getGraph().getVertexs().size() > 0) {
+//					System.out.println(indexFocus);
+					paintPanel.delVertex(vertexFocus);
+					paintPanel.repaint();
+					isFocus = false;
+					indexFocus = 0;
+//					paintPanel.setTypeButtonString("");
+//					break;
+				}
+			} catch (Exception ex) {
+				throw ex;
+			}
+
+			break;
+		}
 		case "":
 		}
 
@@ -142,13 +160,18 @@ public class PaintListener implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		for (int i = 0; i < paintPanel.getGraph().getVertexs().size(); i++) {
+			if (paintPanel.getGraph().getVertexs().get(i).getEllipse().contains(e.getX(), e.getY())) {
+				isFocus = true;
+				indexFocus = paintPanel.getGraph().getVertexs().get(i).getIndex();
+				vertexFocus = paintPanel.getGraph().getVertexs().get(i);
+			}
+		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+//		isFocus =  false;
 
 	}
 
@@ -160,6 +183,22 @@ public class PaintListener implements MouseListener {
 
 	@Override
 	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		if (isFocus) {
+			Vertex v = paintPanel.getGraph().getVertexs().get(indexFocus);
+			Ellipse2D ell = new Ellipse2D.Double(e.getX(), e.getY(), 50, 50);
+			v.setEllipse(ell);
+			paintPanel.repaint();
+		}
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
 
 	}

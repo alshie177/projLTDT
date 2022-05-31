@@ -39,13 +39,7 @@ public class PaintPanel extends JPanel {
 		graph = new Graph();
 		PaintListener paintListener = new PaintListener(this);
 		this.addMouseListener(paintListener);
-	}
-
-	private void init() {
-		JPanel panel = new JPanel();
-		this.setLayout(new BorderLayout());
-		this.add(panel, BorderLayout.CENTER);
-		panel.setBackground(Color.white);
+		this.addMouseMotionListener(paintListener);
 	}
 
 	public String getTypeButtonString() {
@@ -150,7 +144,10 @@ public class PaintPanel extends JPanel {
 	public void setString(String string) {
 		this.string = string;
 	}
-
+	
+	public void delVertex(Vertex v) {
+		graph.delVertex(v);
+	}
 	@Override
 	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
@@ -158,20 +155,20 @@ public class PaintPanel extends JPanel {
 		graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		graphics2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		for (Vertex v : graph.getVertexs()) {
-			double x = v.getEllipse().getX();
-			double y = v.getEllipse().getY();
-			Ellipse2D el = new Ellipse2D.Double(x, y, 50, 50);
+//			double x = v.getEllipse().getX();
+//			double y = v.getEllipse().getY();
+//			Ellipse2D el = new Ellipse2D.Double(x, y, 50, 50);
 			graphics2d.setColor(Color.BLACK);
-			graphics2d.fill(el);
+			graphics2d.fill(v.getEllipse());
 
 			Font font = new Font("Arial", Font.BOLD, 15);
 			FontMetrics metrics = graphics.getFontMetrics(font);
 			graphics.setFont(font);
 			graphics.setColor(Color.white);
 
-			int xString = (int) (el.getX() + (el.getWidth() - metrics.stringWidth(string)) / 2) - 4;
-			int yString = (int) (el.getY() + (el.getHeight() - metrics.getHeight()) / 2) + 14;
-			graphics.drawString(v.getNameVeretex() + "", xString, yString);
+			int xString = (int) (v.getEllipse().getX() + (v.getEllipse().getWidth() - metrics.stringWidth(string)) / 2) - 4;
+			int yString = (int) (v.getEllipse().getY() + (v.getEllipse().getHeight() - metrics.getHeight()) / 2) + 14;
+			graphics.drawString(v.getIndex() + "", xString, yString);
 		}
 		for (Edge edge : graph.getEdges()) {
 			graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

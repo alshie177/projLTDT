@@ -169,8 +169,6 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-//		isFocus =  false;
-
 	}
 
 	@Override
@@ -188,7 +186,7 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		if (isFocus) {
-			Vertex v = paintPanel.getGraph().getVertexs().get(indexFocus);
+			Vertex v = paintPanel.getGraph().getVertexs().get(vertexFocus.getIndex());
 			Ellipse2D ell = new Ellipse2D.Double(e.getX(), e.getY(), 50, 50);
 			v.setEllipse(ell);
 			paintPanel.repaint();

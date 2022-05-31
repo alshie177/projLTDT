@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,6 +14,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,6 +36,8 @@ public class PaintPanel extends JPanel {
 	private boolean undirecred = false;
 	private Edge selectEdge;
 	private String string = "";
+	private ArrayList<QuadCurve2D> curveArrayList = new ArrayList<QuadCurve2D>();
+	private boolean existEdge = false;
 
 	public PaintPanel() {
 		graph = new Graph();
@@ -102,6 +106,22 @@ public class PaintPanel extends JPanel {
 
 	public void setSelectEdge(Edge selectEdge) {
 		this.selectEdge = selectEdge;
+	}
+
+	public boolean isExistEdge() {
+		return existEdge;
+	}
+
+	public void setExistEdge(boolean existEdge) {
+		this.existEdge = existEdge;
+	}
+
+	public ArrayList<QuadCurve2D> getCurveArrayList() {
+		return curveArrayList;
+	}
+
+	public void setCurveArrayList(ArrayList<QuadCurve2D> curveArrayList) {
+		this.curveArrayList = curveArrayList;
 	}
 
 	public Point2D center(Rectangle2D boundsRectangle2d) {
@@ -177,6 +197,7 @@ public class PaintPanel extends JPanel {
 			graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			graphics2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			graphics2d.setColor(Color.BLACK);
+			graphics2d.setStroke(new BasicStroke(7f));
 			if (isDirected() == true) {
 				double from = angleBetween(edge.getNode1(), edge.getNode2());
 				double to = angleBetween(edge.getNode1(), edge.getNode2());
@@ -184,18 +205,41 @@ public class PaintPanel extends JPanel {
 				Point2D pointToPoint2d = getPointOnCircle(edge.getNode2(), to - 22);
 				graphics2d.draw(new Line2D.Double(pointFromPoint2d, pointToPoint2d));
 				graphics2d.draw(new Line2D.Double(pointFromPoint2d, pointToPoint2d));
+				graphics2d.setStroke(new BasicStroke(4f));
 				ArrowHead arrowHead = new ArrowHead();
 				AffineTransform affineTransform = AffineTransform.getTranslateInstance(
 						pointToPoint2d.getX() - (arrowHead.getBounds().getWidth() / 2d), pointToPoint2d.getY());
 				affineTransform.rotate(from, arrowHead.getBounds2D().getCenterX(), 0);
 				arrowHead.transform(affineTransform);
 				graphics2d.draw(arrowHead);
+				if (existEdge == true) {
+					for (QuadCurve2D curve2d : curveArrayList) {
+						graphics2d.draw(new QuadCurve2D.Double(pointFromPoint2d.getX(), pointFromPoint2d.getY(),
+								(pointFromPoint2d.getX() + pointToPoint2d.getX()) / 2,
+								(pointFromPoint2d.getX() + pointToPoint2d.getY()) / 2 + 40, pointToPoint2d.getX(),
+								pointToPoint2d.getY()));
+						ArrowHead arrowHead1 = new ArrowHead();
+						AffineTransform at1 = AffineTransform
+								.getTranslateInstance(curve2d.getX2() - (arrowHead1.getBounds2D().getWidth()-2 / 3d)-15, curve2d.getY2()+22);
+						at1.rotate(curve2d.getX2()-0.5, curve2d.getCtrlX()-0.5,-2);
+						arrowHead1.transform(at1);
+						graphics2d.draw(arrowHead1);
+					}
+				}
 			} else {
 				double from = angleBetween(edge.getNode1(), edge.getNode2());
 				double to = angleBetween(edge.getNode1(), edge.getNode2());
 				Point2D pointFromPoint2d = getPointOnCircle(edge.getNode1(), from);
 				Point2D pointToPoint2d = getPointOnCircle(edge.getNode2(), to - 22);
 				graphics2d.draw(new Line2D.Double(pointFromPoint2d, pointToPoint2d));
+				if (existEdge == true) {
+					for (QuadCurve2D curve2d : curveArrayList) {
+						graphics2d.draw(new QuadCurve2D.Double(pointFromPoint2d.getX(), pointFromPoint2d.getY(),
+								(pointFromPoint2d.getX() + pointToPoint2d.getX()) / 2,
+								(pointFromPoint2d.getX() + pointToPoint2d.getY()) / 2 + 40, pointToPoint2d.getX(),
+								pointToPoint2d.getY()));
+					}
+				}
 			}
 		}
 	}

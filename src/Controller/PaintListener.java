@@ -19,6 +19,7 @@ import java.awt.geom.Ellipse2D.Double;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.QuadCurve2D;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -40,7 +41,7 @@ public class PaintListener implements MouseListener {
 		paintPanel.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent event) {
-				Component srComponent= (Component) event.getSource();
+				Component srComponent = (Component) event.getSource();
 				srComponent.requestFocus();
 			}
 		});
@@ -82,11 +83,25 @@ public class PaintListener implements MouseListener {
 								Line2D line2d = new Line2D.Double(pointFromPoint2d, pointToPoint2d);
 								paintPanel.getGraph().addUnderectedEdge(paintPanel.getSelected1(),
 										paintPanel.getSelected2(), line2d);
+								for (Edge edge : paintPanel.getGraph().getEdges()) {
+									if (edge.getNode1() == paintPanel.getSelected1()
+											&& paintPanel.isExistEdge() == true) {
+										if (edge.getNode2() == paintPanel.getSelected2()) {
+											QuadCurve2D curve2d = new QuadCurve2D.Double(pointFromPoint2d.getX(),
+													pointFromPoint2d.getY(),
+													(pointFromPoint2d.getX() + pointToPoint2d.getX()) / 2,
+													(pointFromPoint2d.getX() + pointToPoint2d.getY()) / 2 + 50,
+													pointToPoint2d.getX(), pointToPoint2d.getY());
+											paintPanel.getCurveArrayList().add(curve2d);
+										}
+									}
+								}
 								paintPanel.setSelected1(null);
 								paintPanel.setSelected2(null);
 								paintPanel.setTypeButtonString("");
 								System.out.println("Edge is available");
 								paintPanel.repaint();
+								paintPanel.setExistEdge(true);
 								break;
 							}
 							if (paintPanel.isDirected() == true) {
@@ -101,11 +116,25 @@ public class PaintListener implements MouseListener {
 								Line2D line2d = new Line2D.Double(pointFromPoint2d, pointToPoint2d);
 								paintPanel.getGraph().addDerectedEdge(paintPanel.getSelected1(),
 										paintPanel.getSelected2(), line2d);
+								for (Edge edge : paintPanel.getGraph().getEdges()) {
+									if (edge.getNode1() == paintPanel.getSelected1()
+											&& paintPanel.isExistEdge() == true) {
+										if (edge.getNode2() == paintPanel.getSelected2()) {
+											QuadCurve2D curve2d = new QuadCurve2D.Double(pointFromPoint2d.getX(),
+													pointFromPoint2d.getY(),
+													(pointFromPoint2d.getX() + pointToPoint2d.getX()) / 2,
+													(pointFromPoint2d.getX() + pointToPoint2d.getY()) / 2 + 50,
+													pointToPoint2d.getX(), pointToPoint2d.getY());
+											paintPanel.getCurveArrayList().add(curve2d);
+										}
+									}
+								}
 								paintPanel.setSelected1(null);
 								paintPanel.setSelected2(null);
 								paintPanel.setTypeButtonString("");
 								System.out.println("Edge is available");
 								paintPanel.repaint();
+								paintPanel.setExistEdge(true);
 								break;
 							}
 							if (paintPanel.isDirected() == false && paintPanel.isUndirecred() == false

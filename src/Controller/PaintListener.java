@@ -61,7 +61,7 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 //			System.out.println("2");
 			paintPanel.setTypeButtonString("");
 			paintPanel.repaint();
-			paintPanel.getGraph().showVertex();
+//			paintPanel.getGraph().showVertex();
 			isFocus = false;
 			break;
 		}
@@ -97,7 +97,7 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 								indexFocus = 0;
 								paintPanel.setTypeButtonString("");
 								System.out.println("Edge is available");
-								paintPanel.getGraph().showEdge();
+//								paintPanel.getGraph().showEdge();
 								paintPanel.repaint();
 								break;
 							}

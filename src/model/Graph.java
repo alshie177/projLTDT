@@ -3,18 +3,22 @@ package model;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Set;
+import java.util.Stack;
 
 public class Graph {
 	private ArrayList<Vertex> vertexs;
 	private ArrayList<Edge> edges;
 	private ArrayList<ArrayList<Integer>> mtkArrayList;
-	ArrayList<Edge> nonDel, edgeDel;
+	ArrayList<Boolean> chuaXet;
+	ArrayList<ArrayList<Integer>> ke;
 
 	public Graph() {
 		vertexs = new ArrayList<Vertex>();
 		edges = new ArrayList<Edge>();
 		mtkArrayList = new ArrayList<ArrayList<Integer>>();
+		
 	}
 
 	public ArrayList<Vertex> getVertexs() {
@@ -66,6 +70,7 @@ public class Graph {
 		edges.add(new Edge(diemdau, diemcuoi, line2d));
 		diemdau.dsKe.add(diemcuoi);
 		diemcuoi.dsKe.add(diemdau);
+		showMtk();
 	}
 
 	public void addUnderectedEdge(Vertex diemdau, Vertex diemcuoi, Line2D line2d) {
@@ -74,6 +79,8 @@ public class Graph {
 		edges.add(new Edge(diemdau, diemcuoi, line2d));
 		diemdau.dsKe.add(diemcuoi);
 		diemcuoi.dsKe.add(diemdau);
+		showMtk();
+
 	}
 
 	public void showVertex() {
@@ -87,7 +94,7 @@ public class Graph {
 	}
 
 	public void showEdge() {
-		System.out.println("List Edge " +edges.size());
+		System.out.println("List Edge " + edges.size());
 		for (int i = 0; i < edges.size(); i++) {
 			double x1 = edges.get(i).getNode1().getEllipse().getX();
 			double y1 = edges.get(i).getNode1().getEllipse().getY();
@@ -103,20 +110,134 @@ public class Graph {
 	}
 
 	public void delVertex(Vertex v) {
-		edgeDel = new ArrayList<>();
 		vertexs.remove(v);
 		int index = v.getIndex();
-		for (int i =0; i < edges.size(); i++) {
+		delEdge(index);
+
+	}
+
+	public void delEdge(int index) {
+		ArrayList<Edge> edgeDel = new ArrayList<>();
+		for (int i = 0; i < edges.size(); i++) {
 			if (edges.get(i).getNode1().getIndex() == index || edges.get(i).getNode2().getIndex() == index) {
 				edgeDel.add(edges.get(i));
-			
+
 			}
 		}
-		for (int i = 0; i< edgeDel.size(); i++) {
+		for (int i = 0; i < edgeDel.size(); i++) {
 			edges.remove(edgeDel.get(i));
 		}
 	}
-	
+
+	public void showMtk() {
+		System.out.println("Mtk");
+		for (int i = 0; i < mtkArrayList.size(); i++) {
+			for (int j = 0; j < mtkArrayList.get(i).size(); j++) {
+				System.out.print(mtkArrayList.get(i).get(j) + " ");
+			}
+			System.out.println();
+		}
+	}
+
+	public boolean arrayCompare(ArrayList<Integer> arr1, ArrayList<Integer> arr2) {
+		for (int i = 0; i < arr1.size(); i++) {
+			if (arr1.get(i) != arr2.get(i))
+				return false;
+		}
+		return true;
+	}
+
+	public boolean ke(int x, int y) {
+		return mtkArrayList.get(x).get(y) == 1;
+	}
+
+	public ArrayList<Integer> dfs(int start, int end) {
+		chuaXet = new ArrayList<>();
+		ke = new ArrayList<>();
+		ArrayList<Integer> result = new ArrayList<>();
+		for (int i = 0; i < mtkArrayList.size(); i++) {
+			chuaXet.add(true);
+		}
+		for (int i = 0; i < mtkArrayList.size(); i++) {
+			ke.add(new ArrayList<Integer>());
+		}
+		for (int i = 0; i < ke.size(); i++) {
+			for (int j = 0; j < ke.size(); j++) {
+				if (ke(i, j)) {
+					ke.get(i).add(j);
+				}
+			}
+		}
+		for (int i = 0; i < ke.size(); i++) {
+			for (int j = 0; j< ke.size(); j++) {
+				if (ke(i, j)) {
+					ke.get(i).add(j);
+				}
+			}
+		}
+		Stack<Integer> temp = new Stack<>();
+		temp.push(start);
+		chuaXet.set(start, false);
+		while (!temp.isEmpty()) {
+			int p = temp.pop();
+			result.add(p);
+			System.out.print(p);
+			if (p == end)
+				return result;
+			for (int i : ke.get(p)) {
+				if (chuaXet.get(i)) {
+					temp.push(i);
+					chuaXet.set(i, false);
+				}
+			}
+		}
+		return result;
+	}
+
+	public ArrayList<Integer> bfs(int start, int end) {
+//		chuaXet = new ArrayList<>();
+		ArrayList<Integer> result = new ArrayList<>();
+		ke = new ArrayList<>();
+		
+		for (int i = 0; i < mtkArrayList.size(); i++) {
+			chuaXet.add(true);
+		}
+		for (int i = 0; i < mtkArrayList.size(); i++) {
+			ke.add(new ArrayList<Integer>());
+		}
+		for (int i = 0; i < ke.size(); i++) {
+			for (int j = 0; j < ke.size(); j++) {
+				if (ke(i, j)) {
+					ke.get(i).add(j);
+				}
+			}
+		}
+		for (int i = 0; i < ke.size(); i++) {
+			for (int j = 0; j< ke.size(); j++) {
+				if (ke(i, j)) {
+					ke.get(i).add(j);
+				}
+			}
+		}
+		LinkedList<Integer> temp = new LinkedList<>();
+		temp.add(start);
+		chuaXet.set(start, false);
+		while (!temp.isEmpty()) {
+//			System.out.println(temp.peek());
+			int p = temp.poll();
+			result.add(p);
+			System.out.print(p);
+			if (p == end)
+				return result;
+			for (int i : ke.get(p)) {
+				if (chuaXet.get(i)) {
+					temp.add(i);
+					chuaXet.set(i, false);
+				}
+			}
+		}
+		return result;
+	}
 //	public void delDirectedsEdge(Edge edge) { 
 //		mtkArrayList.get(edge.getNode1().index).set(edge.getNode2().index, 0);
 //		edges.remove(edge);
@@ -140,7 +261,7 @@ public class Graph {
 		Vertex v2 = new Vertex(1, 1, new ArrayList<>(), ellipse2d);
 		Vertex v3 = new Vertex(2, 2, new ArrayList<>(), ellipse2d);
 		Vertex v4 = new Vertex(3, 3, new ArrayList<>(), ellipse2d);
-		
+
 		Graph g = new Graph();
 		g.addVertex(ellipse2d);
 		g.addVertex(ellipse2d);
@@ -152,7 +273,7 @@ public class Graph {
 		g.addUnderectedEdge(v2, v3, null);
 		g.addUnderectedEdge(v2, v4, null);
 		g.addUnderectedEdge(v3, v4, null);
-		
+
 		g.showEdge();
 		g.delVertex(v1);
 		g.showEdge();

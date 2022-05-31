@@ -99,15 +99,17 @@ public class ToolBarPanel extends JPanel {
 		dFSButton = new JButton();
 		dFSButton.setIcon(
 				new ImageIcon(Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("DFS.png"))));
-
+		dFSButton.addActionListener(actionListener);
+		
 		bFSButton = new JButton();
 		bFSButton.setIcon(
 				new ImageIcon(Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("BFS.png"))));
-
+		bFSButton.addActionListener(actionListener);
 		dijstraButton = new JButton();
 		dijstraButton.setIcon(
 				new ImageIcon(Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("dijkstra.png"))));
-
+		dijstraButton.addActionListener(actionListener);
+		
 		JPanel searchPanel = new JPanel();
 		JToolBar searchToolBar = new JToolBar();
 		searchPanel.add(dFSButton);

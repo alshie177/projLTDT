@@ -17,6 +17,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JPanel;
 
@@ -34,7 +35,7 @@ public class PaintPanel extends JPanel {
 	private boolean undirecred = false;
 	private Edge selectEdge;
 	private String string = "";
-
+	private	int [] vertexs;
 	public PaintPanel() {
 		graph = new Graph();
 		PaintListener paintListener = new PaintListener(this);
@@ -145,9 +146,43 @@ public class PaintPanel extends JPanel {
 		this.string = string;
 	}
 	
+	public int[] getVertexs() {
+		return vertexs;
+	}
+
+	public void setVertexs(int[] vertexs) {
+		this.vertexs = vertexs;
+	}
+
 	public void delVertex(Vertex v) {
 		graph.delVertex(v);
 	}
+	
+	public void fillVertes() {
+		vertexs =new int[graph.getVertexs().size()-1] ;
+		for (int i =0; i< graph.getVertexs().size(); i++) {
+			vertexs[i] = graph.getVertexs().get(i).getIndex();
+		}
+	}
+	
+	public void resetTraved() {
+		for (Edge e: graph.getEdges()) {
+			e.setTravel(false);
+		}
+		for (Vertex e: graph.getVertexs()) {
+			e.setTravel(false);
+		}
+	}
+	
+	public void setTraveled(ArrayList<Integer> result) {
+		for (int i = 0; i < result.size(); i++) {
+			graph.getVertexs().get(result.get(i)).setTravel(true);
+		}
+		for (int i = 0; i < result.size() - 1; i++) {
+			graph.findEdge(result.get(i), result.get(i+1)).setTravel(true);;
+		}
+	}
+	
 	@Override
 	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
@@ -158,9 +193,18 @@ public class PaintPanel extends JPanel {
 //			double x = v.getEllipse().getX();
 //			double y = v.getEllipse().getY();
 //			Ellipse2D el = new Ellipse2D.Double(x, y, 50, 50);
-			graphics2d.setColor(Color.BLACK);
-			graphics2d.fill(v.getEllipse());
-
+			
+			
+			
+			if (v.isTravel()) {
+				graphics2d.setColor(Color.YELLOW);
+				graphics2d.fill(v.getEllipse());
+			}
+			else {
+				graphics2d.setColor(Color.BLACK);
+				graphics2d.fill(v.getEllipse());
+			}
+			
 			Font font = new Font("Arial", Font.BOLD, 15);
 			FontMetrics metrics = graphics.getFontMetrics(font);
 			graphics.setFont(font);
@@ -169,11 +213,15 @@ public class PaintPanel extends JPanel {
 			int xString = (int) (v.getEllipse().getX() + (v.getEllipse().getWidth() - metrics.stringWidth(string)) / 2) - 4;
 			int yString = (int) (v.getEllipse().getY() + (v.getEllipse().getHeight() - metrics.getHeight()) / 2) + 14;
 			graphics.drawString(v.getIndex() + "", xString, yString);
+			graphics2d.setColor(Color.BLACK);
 		}
 		for (Edge edge : graph.getEdges()) {
 			graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			graphics2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			graphics2d.setColor(Color.BLACK);
+			if (edge.isTravel()) {
+				graphics2d.setColor(Color.orange);
+			}
 			if (isDirected() == true) {
 				double from = angleBetween(edge.getNode1(), edge.getNode2());
 				double to = angleBetween(edge.getNode1(), edge.getNode2());
@@ -194,6 +242,7 @@ public class PaintPanel extends JPanel {
 				Point2D pointToPoint2d = getPointOnCircle(edge.getNode2(), to - 22);
 				graphics2d.draw(new Line2D.Double(pointFromPoint2d, pointToPoint2d));
 			}
+			graphics2d.setColor(Color.BLACK);
 		}
 	}
 }

@@ -8,7 +8,7 @@ public class Vertex {
 	Integer index;
 	ArrayList<Vertex> dsKe = new ArrayList<Vertex>();
 	Ellipse2D ellipse;
-
+	boolean isTravel = false;
 
 	public Vertex(Integer nameVeretex, Integer index, ArrayList<Vertex> dsKe, Ellipse2D ellipse) {
 		this.nameVeretex = nameVeretex;
@@ -47,6 +47,14 @@ public class Vertex {
 
 	public void setEllipse(Ellipse2D ellipse) {
 		this.ellipse = ellipse;
+	}
+
+	public boolean isTravel() {
+		return isTravel;
+	}
+
+	public void setTravel(boolean isTravel) {
+		this.isTravel = isTravel;
 	}
 
 }

@@ -8,7 +8,7 @@ public class Edge {
 	private Vertex node1;
 	private Vertex node2;
 	private Line2D line2d;
-
+	boolean isTravel = false;
 
 	public Edge(Vertex node1, Vertex node2, Line2D line2d) {
 		super();
@@ -43,6 +43,14 @@ public class Edge {
 
 	public Point2D center(Rectangle2D boundsRectangle2d) {
 		return new Point2D.Double(boundsRectangle2d.getCenterX(), boundsRectangle2d.getCenterY());
+	}
+
+	public boolean isTravel() {
+		return isTravel;
+	}
+
+	public void setTravel(boolean isTravel) {
+		this.isTravel = isTravel;
 	}
 
 }

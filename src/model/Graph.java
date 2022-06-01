@@ -11,8 +11,6 @@ public class Graph {
 	private ArrayList<Vertex> vertexs;
 	private ArrayList<Edge> edges;
 	private ArrayList<ArrayList<Integer>> mtkArrayList;
-	ArrayList<Boolean> chuaXet;
-	ArrayList<ArrayList<Integer>> ke;
 
 	public Graph() {
 		vertexs = new ArrayList<Vertex>();
@@ -151,110 +149,87 @@ public class Graph {
 		return mtkArrayList.get(x).get(y) == 1;
 	}
 
-	public ArrayList<Integer> dfs(int start, int end) {
-		chuaXet = new ArrayList<>();
-		ke = new ArrayList<>();
-		ArrayList<Integer> result = new ArrayList<>();
-		for (int i = 0; i < mtkArrayList.size(); i++) {
-			chuaXet.add(true);
-		}
-		for (int i = 0; i < mtkArrayList.size(); i++) {
-			ke.add(new ArrayList<Integer>());
-		}
-		for (int i = 0; i < ke.size(); i++) {
-			for (int j = 0; j < ke.size(); j++) {
-				if (ke(i, j)) {
-					ke.get(i).add(j);
-				}
-			}
-		}
-		for (int i = 0; i < ke.size(); i++) {
-			for (int j = 0; j< ke.size(); j++) {
-				if (ke(i, j)) {
-					ke.get(i).add(j);
-				}
-			}
-		}
+	public ArrayList<Integer> dfs(int start) {
+		ArrayList<ArrayList<Integer>> edgeTo = fillEdgeTo();
+		ArrayList<Boolean> isMarked = fillMark();
+		ArrayList<Integer> result = new ArrayList();
+		
 		Stack<Integer> temp = new Stack<>();
 		temp.push(start);
-		chuaXet.set(start, false);
+		isMarked.set(start, true);
 		while (!temp.isEmpty()) {
 			int p = temp.pop();
 			result.add(p);
 			System.out.print(p);
-			if (p == end)
-				return result;
-			for (int i : ke.get(p)) {
-				if (chuaXet.get(i)) {
+			for (int i : edgeTo.get(p)) {
+				if (!isMarked.get(i)) {
 					temp.push(i);
-					chuaXet.set(i, false);
+					isMarked.set(i, true);
 				}
 			}
 		}
+		System.out.println();
 		return result;
 	}
 
-	public ArrayList<Integer> bfs(int start, int end) {
-//		chuaXet = new ArrayList<>();
-		ArrayList<Integer> result = new ArrayList<>();
-		ke = new ArrayList<>();
+	public ArrayList<Integer> bfs(int start) {
+		ArrayList<ArrayList<Integer>> edgeTo = fillEdgeTo();
+		ArrayList<Boolean> isMarked = fillMark();
+		ArrayList<Integer> result = new ArrayList();
 		
-		for (int i = 0; i < mtkArrayList.size(); i++) {
-			chuaXet.add(true);
-		}
-		for (int i = 0; i < mtkArrayList.size(); i++) {
-			ke.add(new ArrayList<Integer>());
-		}
-		for (int i = 0; i < ke.size(); i++) {
-			for (int j = 0; j < ke.size(); j++) {
-				if (ke(i, j)) {
-					ke.get(i).add(j);
-				}
-			}
-		}
-		for (int i = 0; i < ke.size(); i++) {
-			for (int j = 0; j< ke.size(); j++) {
-				if (ke(i, j)) {
-					ke.get(i).add(j);
-				}
-			}
-		}
 		LinkedList<Integer> temp = new LinkedList<>();
 		temp.add(start);
-		chuaXet.set(start, false);
+		isMarked.set(start, true);
 		while (!temp.isEmpty()) {
 //			System.out.println(temp.peek());
 			int p = temp.poll();
 			result.add(p);
 			System.out.print(p);
-			if (p == end)
-				return result;
-			for (int i : ke.get(p)) {
-				if (chuaXet.get(i)) {
+			for (int i : edgeTo.get(p)) {
+				if (!isMarked.get(i)) {
 					temp.add(i);
-					chuaXet.set(i, false);
+					isMarked.set(i, true);
 				}
 			}
 		}
+		System.out.println();
 		return result;
 	}
-//	public void delDirectedsEdge(Edge edge) { 
-//		mtkArrayList.get(edge.getNode1().index).set(edge.getNode2().index, 0);
-//		edges.remove(edge);
-//		edge.getNode1().dsKe.remove(edge.getNode2());
-//		edge.getNode2().dsKe.remove(edge.getNode1());
-//		System.out.println("dellllll");
-//	}
+	
+	public ArrayList<Boolean> fillMark(){
+		ArrayList<Boolean> isMarked = new ArrayList<>();
+		for (int i = 0; i < mtkArrayList.size(); i++) {
+			isMarked.add(false);
+		}
+		return isMarked;
+	}
+	
+	public ArrayList<ArrayList<Integer>> fillEdgeTo(){
+		ArrayList<ArrayList<Integer>> edgeTo = new ArrayList<>();
+		for (int i = 0; i < mtkArrayList.size(); i++) {
+			edgeTo.add(new ArrayList<Integer>());
+		}
+		
+		for (int i = 0; i < edgeTo.size(); i++) {
+			for (int j = 0; j< edgeTo.size(); j++) {
+				if (ke(i, j)) {
+					edgeTo.get(i).add(j);
+				}
+			}
+		}
+		return edgeTo;
+	}
 
-//	public void delUndirectedsEdge(Edge edge) {
-//		mtkArrayList.get(edge.getNode1().index).set(edge.getNode2().index, 0);
-//		mtkArrayList.get(edge.getNode2().index).set(edge.getNode1().index, 0);
-//		edge.getNode1().dsKe.remove(edge.getNode2());
-//		edges.remove(edge);
-//		edge.getNode2().dsKe.remove(edge.getNode1());
-//		System.out.println("dellllll");
-//
-//	}
+	public Edge findEdge(int index1, int index2) {
+		for (Edge e: edges) {
+			if (e.getNode1().getIndex() == index1 && e.getNode2().getIndex()== index2 || 
+					e.getNode2().getIndex() == index1 && e.getNode1().getIndex()== index2) {
+				return e;
+			}
+		}
+		return null;
+	}
+	
 	public static void main(String[] args) {
 		Ellipse2D ellipse2d = new Ellipse2D.Double(1, 1, 11, 11);
 		Vertex v1 = new Vertex(0, 0, new ArrayList<>(), ellipse2d);

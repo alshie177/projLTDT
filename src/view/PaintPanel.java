@@ -156,7 +156,7 @@ public class PaintPanel extends JPanel {
 		double y = center.getY();
 
 		radians = radians - Math.toRadians(90.0); // 0 becomes th?e top
-		// Calculate the outter point of the line
+		
 		double xPosy = Math.round((float) (x + Math.cos(radians) * radius));
 		double yPosy = Math.round((float) (y + Math.sin(radians) * radius));
 

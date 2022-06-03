@@ -11,12 +11,14 @@ public class Graph {
 	private ArrayList<Vertex> vertexs;
 	private ArrayList<Edge> edges;
 	private ArrayList<ArrayList<Integer>> mtkArrayList;
+	ArrayList<ArrayList<Integer>> mtkData;
+	ArrayList<Integer> arrDel = new ArrayList<>();
 
 	public Graph() {
 		vertexs = new ArrayList<Vertex>();
 		edges = new ArrayList<Edge>();
 		mtkArrayList = new ArrayList<ArrayList<Integer>>();
-		
+		mtkData = new ArrayList<ArrayList<Integer>>();
 	}
 
 	public ArrayList<Vertex> getVertexs() {
@@ -47,37 +49,63 @@ public class Graph {
 		if (mtkArrayList.size() == 0) {
 			mtkArrayList.add(new ArrayList<Integer>());
 			mtkArrayList.get(0).add(0);
+
+			mtkData.add(new ArrayList<Integer>());
+			mtkData.get(0).add(0);
+
 			vertexs.add(new Vertex(mtkArrayList.size() - 1, mtkArrayList.size() - 1, new ArrayList<Vertex>(), el));
-			return;
-		}
-		for (int i = 0; i < mtkArrayList.size(); i++) {
-			mtkArrayList.get(i).add(0);
-		}
-		ArrayList<Integer> dongMoIntegers = new ArrayList<Integer>();
-		for (int i = 0; i < mtkArrayList.size() + 1; i++) {
-			dongMoIntegers.add(0);
+		} else {
+			for (int i = 0; i < mtkArrayList.size(); i++) {
+				mtkArrayList.get(i).add(0);
+			}
 
-		}
-		mtkArrayList.add(dongMoIntegers);
-		vertexs.add(new Vertex(mtkArrayList.size() - 1, mtkArrayList.size() - 1, new ArrayList<Vertex>(), el));
+			for (int i = 0; i < mtkData.size(); i++) {
+				mtkData.get(i).add(0);
+			}
 
+			ArrayList<Integer> dongMoIntegers = new ArrayList<Integer>();
+			for (int i = 0; i < mtkArrayList.size() + 1; i++) {
+				dongMoIntegers.add(0);
+
+			}
+			ArrayList<Integer> dongMoIntegers2 = new ArrayList<Integer>();
+			for (int i = 0; i < mtkArrayList.size() + 1; i++) {
+				dongMoIntegers2.add(0);
+
+			}
+			mtkData.add(dongMoIntegers2);
+			mtkArrayList.add(dongMoIntegers);
+
+			vertexs.add(new Vertex(mtkArrayList.size() - 1, mtkArrayList.size() - 1, new ArrayList<Vertex>(), el));
+		}
+
+//		showMtk(mtkArrayList);
+//		showMtk(mtkData);
 	}
 
 	public void addDerectedEdge(Vertex diemdau, Vertex diemcuoi, Line2D line2d) {
 		mtkArrayList.get(diemdau.index).set(diemcuoi.index, 1);
+
+		mtkData.get(diemdau.index).set(diemcuoi.index, 1);
+
 		edges.add(new Edge(diemdau, diemcuoi, line2d));
 		diemdau.dsKe.add(diemcuoi);
 		diemcuoi.dsKe.add(diemdau);
-		showMtk();
+		showMtk(mtkArrayList);
+
 	}
 
 	public void addUnderectedEdge(Vertex diemdau, Vertex diemcuoi, Line2D line2d) {
 		mtkArrayList.get(diemdau.index).set(diemcuoi.index, 1);
 		mtkArrayList.get(diemcuoi.index).set(diemdau.index, 1);
+
+		mtkData.get(diemdau.index).set(diemcuoi.index, 1);
+		mtkData.get(diemcuoi.index).set(diemdau.index, 1);
+
 		edges.add(new Edge(diemdau, diemcuoi, line2d));
 		diemdau.dsKe.add(diemcuoi);
 		diemcuoi.dsKe.add(diemdau);
-		showMtk();
+		showMtk(mtkArrayList);
 
 	}
 
@@ -111,7 +139,9 @@ public class Graph {
 		vertexs.remove(v);
 		int index = v.getIndex();
 		delEdge(index);
-
+		delEdgeInMtk(index);
+		System.out.println("arr del");
+		showMtk(mtkArrayList);
 	}
 
 	public void delEdge(int index) {
@@ -127,22 +157,40 @@ public class Graph {
 		}
 	}
 
-	public void showMtk() {
-		System.out.println("Mtk");
+	public void delEdgeInMtk(int index) {
+
+		arrDel.add(index);
 		for (int i = 0; i < mtkArrayList.size(); i++) {
-			for (int j = 0; j < mtkArrayList.get(i).size(); j++) {
-				System.out.print(mtkArrayList.get(i).get(j) + " ");
+			mtkArrayList.get(i).set(index, 0);
+			mtkArrayList.get(index).set(i, 0);
+		}
+
+		for (int i = 0; i < mtkArrayList.size(); i++) {
+			for (int j = 0; j < mtkArrayList.size(); j++) {
+				if (checkDel(arrDel, i) && checkDel(arrDel, j)) {
+					mtkArrayList.get(i).set(j, mtkData.get(i).get(j));
+				}
 			}
-			System.out.println();
 		}
 	}
 
-	public boolean arrayCompare(ArrayList<Integer> arr1, ArrayList<Integer> arr2) {
-		for (int i = 0; i < arr1.size(); i++) {
-			if (arr1.get(i) != arr2.get(i))
+	public boolean checkDel(ArrayList<Integer> arr, int index) {
+		for (int i = 0; i < arr.size(); i++) {
+			if (arr.get(i) == index) {
 				return false;
+			}
 		}
 		return true;
+	}
+
+	public void showMtk(ArrayList<ArrayList<Integer>> mtk) {
+		System.out.println("Mtk");
+		for (int i = 0; i < mtk.size(); i++) {
+			for (int j = 0; j < mtk.get(i).size(); j++) {
+				System.out.print(mtk.get(i).get(j) + " ");
+			}
+			System.out.println();
+		}
 	}
 
 	public boolean ke(int x, int y) {
@@ -153,14 +201,16 @@ public class Graph {
 		ArrayList<ArrayList<Integer>> edgeTo = fillEdgeTo();
 		ArrayList<Boolean> isMarked = fillMark();
 		ArrayList<Integer> result = new ArrayList();
-		
+
 		Stack<Integer> temp = new Stack<>();
 		temp.push(start);
 		isMarked.set(start, true);
 		while (!temp.isEmpty()) {
 			int p = temp.pop();
+
 			result.add(p);
 			System.out.print(p);
+
 			for (int i : edgeTo.get(p)) {
 				if (!isMarked.get(i)) {
 					temp.push(i);
@@ -176,7 +226,7 @@ public class Graph {
 		ArrayList<ArrayList<Integer>> edgeTo = fillEdgeTo();
 		ArrayList<Boolean> isMarked = fillMark();
 		ArrayList<Integer> result = new ArrayList();
-		
+
 		LinkedList<Integer> temp = new LinkedList<>();
 		temp.add(start);
 		isMarked.set(start, true);
@@ -195,23 +245,23 @@ public class Graph {
 		System.out.println();
 		return result;
 	}
-	
-	public ArrayList<Boolean> fillMark(){
+
+	public ArrayList<Boolean> fillMark() {
 		ArrayList<Boolean> isMarked = new ArrayList<>();
 		for (int i = 0; i < mtkArrayList.size(); i++) {
 			isMarked.add(false);
 		}
 		return isMarked;
 	}
-	
-	public ArrayList<ArrayList<Integer>> fillEdgeTo(){
+
+	public ArrayList<ArrayList<Integer>> fillEdgeTo() {
 		ArrayList<ArrayList<Integer>> edgeTo = new ArrayList<>();
 		for (int i = 0; i < mtkArrayList.size(); i++) {
 			edgeTo.add(new ArrayList<Integer>());
 		}
-		
+
 		for (int i = 0; i < edgeTo.size(); i++) {
-			for (int j = 0; j< edgeTo.size(); j++) {
+			for (int j = 0; j < edgeTo.size(); j++) {
 				if (ke(i, j)) {
 					edgeTo.get(i).add(j);
 				}
@@ -221,15 +271,15 @@ public class Graph {
 	}
 
 	public Edge findEdge(int index1, int index2) {
-		for (Edge e: edges) {
-			if (e.getNode1().getIndex() == index1 && e.getNode2().getIndex()== index2 || 
-					e.getNode2().getIndex() == index1 && e.getNode1().getIndex()== index2) {
+		for (Edge e : edges) {
+			if (e.getNode1().getIndex() == index1 && e.getNode2().getIndex() == index2
+					|| e.getNode2().getIndex() == index1 && e.getNode1().getIndex() == index2) {
 				return e;
 			}
 		}
 		return null;
 	}
-	
+
 	public static void main(String[] args) {
 		Ellipse2D ellipse2d = new Ellipse2D.Double(1, 1, 11, 11);
 		Vertex v1 = new Vertex(0, 0, new ArrayList<>(), ellipse2d);
@@ -248,13 +298,24 @@ public class Graph {
 		g.addUnderectedEdge(v2, v3, null);
 		g.addUnderectedEdge(v2, v4, null);
 		g.addUnderectedEdge(v3, v4, null);
-
-		g.showEdge();
+		ArrayList<Integer> a1 = new ArrayList<>();
+		a1.add(1);
+		a1.add(1);
+		a1.add(1);
+		a1.add(0);
+		a1.add(0);
+//		g.showEdge();
+		g.showMtk(g.mtkArrayList);
 		g.delVertex(v1);
-		g.showEdge();
+//		System.out.println("Column "+g.findColumn(a1));
+//		g.showEdge();
+		g.showMtk(g.mtkArrayList);
 		g.delVertex(v2);
-		g.showEdge();
+//		g.showEdge();
+		g.showMtk(g.mtkArrayList);
 		g.delVertex(v3);
-		g.showEdge();
+//		g.showEdge();
+		g.showMtk(g.mtkArrayList);
+
 	}
 }

@@ -66,12 +66,6 @@ public class GListenter implements ActionListener {
 
 			ArrayList<Integer> result = paintPanel.getGraph().dfs(Start);
 			paintPanel.setTraveled(result);
-//			for (int i = 0; i < result.size(); i++) {
-//				paintPanel.getGraph().getVertexs().get(i).setTravel(true);
-//			}
-//			for (int i = 0; i < result.size() - 1; i++) {
-//				paintPanel.getGraph().findEdge(result.get(i), result.get(i+1)).setTravel(true);;
-//			}
 			paintPanel.repaint();
 		}
 		if (inputString.equals("bFS")) {
@@ -88,12 +82,6 @@ public class GListenter implements ActionListener {
 			}
 			ArrayList<Integer> result = paintPanel.getGraph().bfs(Start);
 			paintPanel.setTraveled(result);
-//			for (int i = 0; i < result.size(); i++) {
-//				paintPanel.getGraph().getVertexs().get(i).setTravel(true);
-//			}
-//			for (int i = 0; i < result.size() - 1; i++) {
-//				paintPanel.getGraph().findEdge(result.get(i), result.get(i+1)).setTravel(true);;
-//			}
 			paintPanel.repaint();
 		}
 	}

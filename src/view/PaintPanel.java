@@ -175,12 +175,39 @@ public class PaintPanel extends JPanel {
 	}
 	
 	public void setTraveled(ArrayList<Integer> result) {
-		for (int i = 0; i < result.size(); i++) {
-			graph.getVertexs().get(result.get(i)).setTravel(true);
+		for (int i =0; i < result.size(); i++) {
+			for (int j =0; j< graph.getVertexs().size(); j++) {
+				if (graph.getVertexs().get(j).getIndex() == result.get(i)) {
+					graph.getVertexs().get(j).setTravel(true);
+				}
+			}
+			
 		}
-		for (int i = 0; i < result.size() - 1; i++) {
-			graph.findEdge(result.get(i), result.get(i+1)).setTravel(true);;
+		
+		int index = setTraveledEdge(result);
+		System.out.println("adssad "+index);
+		int sizeResult = 0;
+		while (index < result.size()) {
+			for (int i =0; i < result.size()-1; i++) {
+				if (graph.findEdge(result.get(i), result.get(i+1)) != null) {
+					graph.findEdge(result.get(i), result.get(i+1)).setTravel(true);
+				}
+			}
+			result.remove(index);
 		}
+		
+		
+		
+	}
+	
+	public int setTraveledEdge(ArrayList<Integer> result) {
+		int index = 0;
+		for (int i =0; i < result.size()-1; i++) {
+			if (graph.findEdge(result.get(i), result.get(i+1)) != null) {
+				index = index+1;
+			}
+		}
+		return index;
 	}
 	
 	@Override
@@ -190,12 +217,6 @@ public class PaintPanel extends JPanel {
 		graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		graphics2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		for (Vertex v : graph.getVertexs()) {
-//			double x = v.getEllipse().getX();
-//			double y = v.getEllipse().getY();
-//			Ellipse2D el = new Ellipse2D.Double(x, y, 50, 50);
-			
-			
-			
 			if (v.isTravel()) {
 				graphics2d.setColor(Color.YELLOW);
 				graphics2d.fill(v.getEllipse());

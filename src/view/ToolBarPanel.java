@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -40,14 +41,17 @@ public class ToolBarPanel extends JPanel {
 		openButton = new JButton();
 		openButton.setIcon(
 				new ImageIcon(Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("add-file.png"))));
+		openButton.setActionCommand("open");
 
 		saveButton = new JButton();
 		saveButton.setIcon(new ImageIcon(
 				Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("Save-icon.png"))));
+		saveButton.setActionCommand("save");
 
 		buttonNew = new JButton();
 		buttonNew.setIcon(new ImageIcon(
 				Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("New-file-icon.png"))));
+		buttonNew.setActionCommand("buttonNew");
 
 		JPanel filePanel = new JPanel();
 		JToolBar fileToolBar = new JToolBar();
@@ -85,7 +89,8 @@ public class ToolBarPanel extends JPanel {
 		moveButton = new JButton();
 		moveButton.setIcon(
 				new ImageIcon(Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("move.png"))));
-
+		moveButton.setActionCommand("move");
+		
 		JPanel graphPanel = new JPanel();
 		JToolBar graphToolBar = new JToolBar();
 		graphPanel.add(addVertexButton);
@@ -99,15 +104,30 @@ public class ToolBarPanel extends JPanel {
 		dFSButton = new JButton();
 		dFSButton.setIcon(
 				new ImageIcon(Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("DFS.png"))));
-
+		dFSButton.addActionListener(actionListener);
+		dFSButton.setBorder(BorderFactory.createEmptyBorder());
+		dFSButton.setContentAreaFilled(false);
+		dFSButton.setFocusPainted(false);
+		dFSButton.setActionCommand("dFS");
+		
 		bFSButton = new JButton();
 		bFSButton.setIcon(
 				new ImageIcon(Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("BFS.png"))));
-
+		bFSButton.setBorder(BorderFactory.createEmptyBorder());
+		bFSButton.setContentAreaFilled(false);
+		bFSButton.setFocusPainted(false);
+		bFSButton.addActionListener(actionListener);
+		bFSButton.setActionCommand("bFS");
+		
 		dijstraButton = new JButton();
 		dijstraButton.setIcon(
-				new ImageIcon(Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("dijkstra.png"))));
-
+				new ImageIcon(Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("Dijktra.png"))));
+		dijstraButton.setBorder(BorderFactory.createEmptyBorder());
+		dijstraButton.setContentAreaFilled(false);
+		dijstraButton.setFocusPainted(false);
+		dijstraButton.addActionListener(actionListener);
+		dijstraButton.setActionCommand("dijstra");
+		
 		JPanel searchPanel = new JPanel();
 		JToolBar searchToolBar = new JToolBar();
 		searchPanel.add(dFSButton);
@@ -119,20 +139,18 @@ public class ToolBarPanel extends JPanel {
 
 		undirectedButton = new JRadioButton("Undirected");
 		undirectedButton.setForeground(Color.BLACK);
-//		undirectedButton.setSelected(true);
 		undirectedButton.setFont(new Font("Rockwell", Font.BOLD, 23));
 		undirectedButton.setFocusable(false);
 		undirectedButton.addActionListener(actionListener);
-		undirectedButton.setActionCommand("Directed");
+		undirectedButton.setActionCommand("undirected");
 		toolBar.add(undirectedButton);
 
 		directedButton = new JRadioButton("Directed");
 		directedButton.setForeground(Color.BLACK);
-//		directedButton.setSelected(true);
 		directedButton.setFont(new Font("Rockwell", Font.BOLD, 23));
 		directedButton.setFocusable(false);
 		directedButton.addActionListener(actionListener);
-		directedButton.setActionCommand("Directed");
+		directedButton.setActionCommand("directed");
 		toolBar.add(directedButton);
 
 		openButton.setFocusPainted(false);
@@ -155,15 +173,6 @@ public class ToolBarPanel extends JPanel {
 		this.add(searchToolBar);
 		this.add(toolBar);
 
-		openButton.setActionCommand("open");
-		saveButton.setActionCommand("save");
-		buttonNew.setActionCommand("buttonNew");
-		moveButton.setActionCommand("move");
-		dFSButton.setActionCommand("dFS");
-		bFSButton.setActionCommand("bFS");
-		dijstraButton.setActionCommand("dijstra");
-		directedButton.setActionCommand("directed");
-		undirectedButton.setActionCommand("undirected");
 
 	}
 

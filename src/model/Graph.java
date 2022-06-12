@@ -3,6 +3,7 @@ package model;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.Stack;
@@ -276,6 +277,102 @@ public class Graph {
 		showMtk(mtkArrayList);
 	}
 
+	public void newFile() {
+		mtkArrayList.removeAll(mtkArrayList);
+		vertexs.removeAll(vertexs);
+		edges.removeAll(edges);
+		mtkData.removeAll(mtkData);
+	}
+
+//	public static int[] removeTheElement(int[] arr, int index) {
+//
+//		if (arr == null || index < 0 || index >= arr.length) {
+//
+//			return arr;
+//		}
+//
+//		int[] anotherArray = new int[arr.length - 1];
+//
+//		for (int i = 0, k = 0; i < arr.length; i++) {
+//
+//			if (i == index) {
+//				continue;
+//			}
+//
+//			anotherArray[k++] = arr[i];
+//		}
+//
+//		return anotherArray;
+//	}
+
+//	public ArrayList<Integer> dijkstra(Vertex src, Vertex end) {
+//		ArrayList<Integer> rArrayList = new ArrayList<>();
+//		ArrayList<Integer> lArrayList = new ArrayList<>();
+//		ArrayList<Integer> pArrayList = new ArrayList<>();
+//
+//		for (int i = 0; i < vertexs.size(); i++) {
+//			rArrayList.add(0);
+//			lArrayList.add(Integer.MAX_VALUE);
+//			pArrayList.add(-1);
+//		}
+//
+//		for (int i = 0; i < vertexs.size(); i++) {
+//			rArrayList.set(i, i);
+//		}
+//		lArrayList.set(src.getIndex(), 0);
+//		pArrayList.set(0, src.index);
+//
+//		int value;
+//		while (rArrayList.size() != 0) {
+//
+//			for (int i = 0; i < rArrayList.size(); i++) {
+//				
+//			}
+//			value = Collections.min(lArrayList);
+//			if (value == end.getIndex()) {
+//				rArrayList.remove(value);
+//				break;
+//			}
+//			rArrayList.remove(value);
+//			ArrayList<Integer> dskeArrayList = new ArrayList<>();
+//			for (int i = 0; i < vertexs.size(); i++) {
+//				if (mtkArrayList.get(value).get(i) != 0) {
+//					dskeArrayList.add(i);
+//				} else {
+//					if (mtkArrayList.get(i).get(value) != 0) {
+//						dskeArrayList.add(i);
+//					}
+//				}
+//			}
+//			ArrayList<Integer> datArrayList = new ArrayList<>();
+//			for (int i = 0; i < rArrayList.size(); i++) {
+//				if (rArrayList.contains(dskeArrayList.get(i))) {
+//					datArrayList.add(dskeArrayList.get(i));
+//				}
+//			}
+//			for (Integer i : datArrayList) {
+//				if (lArrayList.get(i) > lArrayList.get(value) + mtkArrayList.get(value).get(i)) {
+//					lArrayList.set(i, lArrayList.get(value) + mtkArrayList.get(value).get(i));
+//					pArrayList.set(i, value);
+//				}
+//			}
+//		}
+//		return pArrayList;
+//	}
+//
+//	private ArrayList<Integer> getdsKe(int vertex) {
+//		ArrayList<Integer> resArrayList = new ArrayList<>();
+//		for (int i = 0; i < vertexs.size(); i++) {
+//			if (vertexs.get(i).getIndex() == vertex) {
+//				System.out.println(vertexs.get(i).getDsKe().toString());
+//				for (Vertex v : vertexs.get(i).getDsKe()) {
+//					resArrayList.add(v.getIndex());
+//				}
+//			}
+//		}
+//		return resArrayList;
+//	}
+
 	public static void main(String[] args) {
 		Ellipse2D ellipse2d = new Ellipse2D.Double(1, 1, 11, 11);
 		Vertex v1 = new Vertex(0, new ArrayList<>(), ellipse2d, false);
@@ -289,11 +386,11 @@ public class Graph {
 		g.addVertex(ellipse2d);
 		g.addVertex(ellipse2d);
 		g.addUnderectedEdge(v1, v2, null, 1);
-		g.addUnderectedEdge(v1, v3, null, 1);
-		g.addUnderectedEdge(v1, v4, null, 1);
-		g.addUnderectedEdge(v2, v3, null, 1);
-		g.addUnderectedEdge(v2, v4, null, 1);
-		g.addUnderectedEdge(v3, v4, null, 1);
+		g.addUnderectedEdge(v1, v3, null, 5);
+		g.addUnderectedEdge(v1, v4, null, 7);
+		g.addUnderectedEdge(v2, v3, null, 3);
+		g.addUnderectedEdge(v2, v4, null, 2);
+//		g.addUnderectedEdge(v3, v4, null, 1);
 		ArrayList<Integer> a1 = new ArrayList<>();
 		a1.add(1);
 		a1.add(1);
@@ -301,17 +398,20 @@ public class Graph {
 		a1.add(0);
 		a1.add(0);
 //		g.showEdge();
-		g.showMtk(g.mtkArrayList);
-		g.delVertex(v1);
+//		g.showMtk(g.mtkArrayList);
+//		g.delVertex(v1);
 //		System.out.println("Column "+g.findColumn(a1));
 //		g.showEdge();
-		g.showMtk(g.mtkArrayList);
-		g.delVertex(v2);
-//		g.showEdge();
-		g.showMtk(g.mtkArrayList);
-		g.delVertex(v3);
-//		g.showEdge();
-		g.showMtk(g.mtkArrayList);
-
+//		g.showMtk(g.mtkArrayList);
+//		g.delVertex(v2);
+////		g.showEdge();
+//		g.showMtk(g.mtkArrayList);
+//		g.delVertex(v3);
+////		g.showEdge();
+//		g.showMtk(g.mtkArrayList);
+//		g.bfs(2);
+		System.out.println("-----");
+		g.dijkstra(v1, v3);
+		System.out.println(g.dijkstra(v1, v3).toString());
 	}
 }

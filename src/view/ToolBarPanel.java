@@ -42,16 +42,19 @@ public class ToolBarPanel extends JPanel {
 		openButton.setIcon(
 				new ImageIcon(Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("add-file.png"))));
 		openButton.setActionCommand("open");
+		openButton.addActionListener(actionListener);
 
 		saveButton = new JButton();
 		saveButton.setIcon(new ImageIcon(
 				Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("Save-icon.png"))));
 		saveButton.setActionCommand("save");
+		saveButton.addActionListener(actionListener);
 
 		buttonNew = new JButton();
 		buttonNew.setIcon(new ImageIcon(
 				Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("New-file-icon.png"))));
-		buttonNew.setActionCommand("buttonNew");
+		buttonNew.setActionCommand("new");
+		buttonNew.addActionListener(actionListener);
 
 		JPanel filePanel = new JPanel();
 		JToolBar fileToolBar = new JToolBar();
@@ -174,6 +177,22 @@ public class ToolBarPanel extends JPanel {
 		this.add(toolBar);
 
 
+	}
+
+	public JRadioButton getDirectedButton() {
+		return directedButton;
+	}
+
+	public void setDirectedButton(JRadioButton directedButton) {
+		this.directedButton = directedButton;
+	}
+
+	public JRadioButton getUndirectedButton() {
+		return undirectedButton;
+	}
+
+	public void setUndirectedButton(JRadioButton undirectedButton) {
+		this.undirectedButton = undirectedButton;
 	}
 
 	public void setEnable() {

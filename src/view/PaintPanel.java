@@ -334,7 +334,7 @@ public class PaintPanel extends JPanel {
 								- metrics.stringWidth(string)) / 2 + 10;
 
 						int yString = (int) (pointFromPoint2d.getY() + (pointToPoint2d.getY()) - metrics.getHeight())
-								/ 2 + 48;
+								/ 2 + 38;
 						graphics.drawString(edge.getValue() + "", xString, yString);
 					} else {
 						graphics.setColor(Color.black);
@@ -350,9 +350,10 @@ public class PaintPanel extends JPanel {
 								- metrics.stringWidth(string)) / 2 + 10;
 
 						int yString = (int) (pointFromPoint2d.getY() + (pointToPoint2d.getY()) - metrics.getHeight())
-								/ 2 + 40;
+								/ 2 + 38;
 						graphics.drawString(edge.getValue() + "", xString, yString);
 					}
+					graphics2d.setColor(Color.black);
 				}
 			}
 			if (isUndirecred() == true) {
@@ -366,16 +367,6 @@ public class PaintPanel extends JPanel {
 							(pointFromPoint2d.getX() + pointToPoint2d.getX()) / 2,
 							(pointFromPoint2d.getX() + pointToPoint2d.getY()) / 2 + 5, pointToPoint2d.getX(),
 							pointToPoint2d.getY()));
-//					Font font = new Font("Arial", Font.BOLD, 15);
-//					FontMetrics metrics = graphics.getFontMetrics(font);
-//					graphics.setFont(font);
-//					graphics.setColor(Color.red);
-//					int xString = (int) (pointFromPoint2d.getX() + ((pointToPoint2d.getX()))
-//							- metrics.stringWidth(string)) / 2 + 10;
-//
-//					int yString = (int) (pointFromPoint2d.getY() + (pointToPoint2d.getY()) - metrics.getHeight()) / 2
-//							+ 40;
-//					graphics.drawString(edge.getValue() + "", xString, yString);
 				}
 			}
 		}

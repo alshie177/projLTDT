@@ -84,12 +84,6 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 							System.out.println("s2 A");
 							if (paintPanel.isUndirecred() == true && paintPanel.getSelected1().isExistEdge() == true
 									&& paintPanel.getSelected2().isExistEdge() == true) {
-//								String valueString = (String) JOptionPane.showInputDialog(null, "Nhập giá trị cho Cạnh",
-//										"Vui lòng nhập giá trị cho cạnh", JOptionPane.QUESTION_MESSAGE, null, null,
-//										"1");
-//								int value = Integer.parseInt(valueString);
-//								paintPanel.getEdges()
-//										.add(new Edge(paintPanel.getSelected1(), paintPanel.getSelected2(), null, value));
 
 								double from = paintPanel.angleBetween(paintPanel.getSelected1(),
 										paintPanel.getSelected2());
@@ -161,27 +155,29 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 							}
 							if (paintPanel.isDirected() == true && paintPanel.getSelected1().isExistEdge() == true
 									&& paintPanel.getSelected2().isExistEdge() == true) {
-								String valueString = (String) JOptionPane.showInputDialog(null, "Nhập giá trị cho Cạnh",
-										"Vui lòng nhập giá trị cho cạnh", JOptionPane.QUESTION_MESSAGE, null, null,
-										"1");
-								int value;
-								try {
-									value = Integer.parseInt(valueString);
-								} catch (Exception ex) {
-									JOptionPane.showMessageDialog(paintPanel, "Vui lòng nhập đúng định dạng");
-									paintPanel.setSelected1(null);
-									paintPanel.setSelected2(null);
-									isFocus = false;
-									paintPanel.setTypeButtonString("");
-									paintPanel.repaint();
-									return;
-								}
-								paintPanel.getEdges().add(
-										new Edge(paintPanel.getSelected1(), paintPanel.getSelected2(), null, value));
-								if (paintPanel.getGraph().getMtkArrayList().get(a).get(b) == 0) {
+								if (paintPanel.getGraph().getMtkArrayList().get(paintPanel.getSelected1().getIndex()).get(paintPanel.getSelected2().getIndex()) == 0) {
+									String valueString = (String) JOptionPane.showInputDialog(null, "Nhập giá trị cho Cạnh",
+											"Vui lòng nhập giá trị cho cạnh", JOptionPane.QUESTION_MESSAGE, null, null,
+											"1");
+									int value;
+									try {
+										value = Integer.parseInt(valueString);
+									} catch (Exception ex) {
+										JOptionPane.showMessageDialog(paintPanel, "Vui lòng nhập đúng định dạng");
+										paintPanel.setSelected1(null);
+										paintPanel.setSelected2(null);
+										isFocus = false;
+										paintPanel.setTypeButtonString("");
+										paintPanel.repaint();
+										return;
+									}
+									paintPanel.getEdges().add(
+											new Edge(paintPanel.getSelected1(), paintPanel.getSelected2(), null, value));
 									paintPanel.getGraph().addDerectedEdge(paintPanel.getSelected1(),
 											paintPanel.getSelected2(), null, value);
 								}
+								paintPanel.getEdges().add(
+										new Edge(paintPanel.getSelected1(), paintPanel.getSelected2(), null, 1));
 								double from = paintPanel.angleBetween(paintPanel.getSelected1(),
 										paintPanel.getSelected2());
 								double to = paintPanel.angleBetween(paintPanel.getSelected1(),

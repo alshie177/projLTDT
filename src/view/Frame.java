@@ -24,7 +24,7 @@ public class Frame extends JFrame {
 		JFrame frame = new JFrame();
 		frame.setTitle("Graph theory");
 		frame.setMinimumSize(new Dimension(870, 500));
-//		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

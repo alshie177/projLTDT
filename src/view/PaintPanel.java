@@ -13,6 +13,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JPanel;
 
@@ -173,6 +174,12 @@ public class PaintPanel extends JPanel {
 		}
 	}
 
+	public void resetSelected() {
+		for (Vertex vertex : graph.getVertexs()) {
+			vertex.setSelected(false);
+		}
+	}
+
 	public void setTraveled(ArrayList<Integer> result) {
 		for (int i = 0; i < result.size(); i++) {
 			for (int j = 0; j < graph.getVertexs().size(); j++) {
@@ -184,12 +191,18 @@ public class PaintPanel extends JPanel {
 		}
 
 		int index = setTraveledEdge(result);
-		System.out.println("adssad " + index);
+		System.out.println("" + index);
 		int sizeResult = 0;
 		while (index < result.size()) {
 			for (int i = 0; i < result.size() - 1; i++) {
 				if (graph.findEdge(result.get(i), result.get(i + 1)) != null) {
 					graph.findEdge(result.get(i), result.get(i + 1)).setTravel(true);
+				} else {
+					for (int a = i; a > -1; a--) {
+						if (graph.findEdge(result.get(a), result.get(i + 1)) != null) {
+							graph.findEdge(result.get(a), result.get(i + 1)).setTravel(true);
+						}
+					}
 				}
 			}
 			result.remove(index);
@@ -242,10 +255,13 @@ public class PaintPanel extends JPanel {
 				graphics2d.setColor(Color.YELLOW);
 				graphics2d.fill(v.getEllipse());
 			} else {
+				if (v.isSelected()) {
+					graphics2d.setColor(Color.gray);
+					graphics2d.fill(v.getEllipse());
+				}
 				graphics2d.setColor(Color.BLACK);
 				graphics2d.fill(v.getEllipse());
 			}
-
 			Font font = new Font("Arial", Font.BOLD, 15);
 			FontMetrics metrics = graphics.getFontMetrics(font);
 			graphics.setFont(font);

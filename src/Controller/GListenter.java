@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
@@ -25,6 +26,7 @@ import java.util.Random;
 import java.util.StringTokenizer;
 
 import javax.print.attribute.standard.Sides;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -78,36 +80,40 @@ public class GListenter implements ActionListener {
 			toolBarPanel.setEnable();
 		}
 		if (inputString.equals("dFS")) {
+//			paintPanel.resetTraved();
+//			paintPanel.repaint();
+//			String start = JOptionPane.showInputDialog("Nhập điểm bắt đầu");
+//			int Start;
+//			try {
+//				Start = Integer.parseInt(start);
+//			} catch (Exception ex) {
+//				JOptionPane.showMessageDialog(paintPanel, "Vui lòng nhập đúng định dạng");
+//				return;
+//			}
+//
+//			ArrayList<Integer> result = paintPanel.getGraph().dfs(Start);
+//			paintPanel.setTraveled(result);
+//			paintPanel.repaint();
 			paintPanel.resetTraved();
 			paintPanel.repaint();
-			String start = JOptionPane.showInputDialog("Nhập điểm bắt đầu");
-			int Start;
-			try {
-				Start = Integer.parseInt(start);
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(paintPanel, "Vui lòng nhập đúng định dạng");
-				return;
-			}
-
-			ArrayList<Integer> result = paintPanel.getGraph().dfs(Start);
-			paintPanel.setTraveled(result);
-			paintPanel.repaint();
+			paintPanel.setTypeButtonString("dFS");
 		}
 		if (inputString.equals("bFS")) {
 			paintPanel.resetTraved();
 			paintPanel.repaint();
-			String start = JOptionPane.showInputDialog("Nhập điểm bắt đầu");
-			int Start;
-			try {
-				Start = Integer.parseInt(start);
-
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(paintPanel, "Vui lòng nhập đúng định dạng");
-				return;
-			}
-			ArrayList<Integer> result = paintPanel.getGraph().bfs(Start);
-			paintPanel.setTraveled(result);
-			paintPanel.repaint();
+			paintPanel.setTypeButtonString("bFS");
+//			String start = JOptionPane.showInputDialog("Nhập điểm bắt đầu");
+//			int Start;
+//			try {
+//				Start = Integer.parseInt(start);
+//
+//			} catch (Exception ex) {
+//				JOptionPane.showMessageDialog(paintPanel, "Vui lòng nhập đúng định dạng");
+//				return;
+//			}
+//			ArrayList<Integer> result = paintPanel.getGraph().bfs(Start);
+//			paintPanel.setTraveled(result);
+//			paintPanel.repaint();
 		}
 		if (inputString.equals("new")) {
 			paintPanel.getGraph().newFile();

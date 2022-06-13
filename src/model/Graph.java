@@ -13,7 +13,7 @@ public class Graph {
 	private ArrayList<Edge> edges;
 	private ArrayList<ArrayList<Integer>> mtkArrayList;
 	private ArrayList<ArrayList<Integer>> mtkData;
-	ArrayList<Integer> arrDel = new ArrayList<>();
+	private ArrayList<Integer> arrDel = new ArrayList<>();
 
 	public Graph() {
 		vertexs = new ArrayList<Vertex>();
@@ -195,6 +195,10 @@ public class Graph {
 		return result;
 	}
 
+	public void travel(ArrayList<Integer> arrayList) {
+
+	}
+
 	public ArrayList<Integer> bfs(int start) {
 		ArrayList<ArrayList<Integer>> edgeTo = fillEdgeTo();
 		ArrayList<Boolean> isMarked = fillMark();
@@ -259,8 +263,7 @@ public class Graph {
 		mtkData.get(diemdau.index).set(diemcuoi.index, value);
 
 		edges.add(new Edge(diemdau, diemcuoi, line2d, value));
-		diemdau.dsKe.add(diemcuoi);
-		diemcuoi.dsKe.add(diemdau);
+		diemcuoi.getDsKe().add(diemdau);
 		showMtk(mtkArrayList);
 	}
 
@@ -272,8 +275,8 @@ public class Graph {
 		mtkData.get(diemcuoi.index).set(diemdau.index, value);
 
 		edges.add(new Edge(diemdau, diemcuoi, line2d, value));
-		diemdau.dsKe.add(diemcuoi);
-		diemcuoi.dsKe.add(diemdau);
+		diemdau.getDsKe().add(diemcuoi);
+		diemcuoi.getDsKe().add(diemdau);
 		showMtk(mtkArrayList);
 	}
 
@@ -284,56 +287,39 @@ public class Graph {
 		mtkData.removeAll(mtkData);
 	}
 
-//	public static int[] removeTheElement(int[] arr, int index) {
-//
-//		if (arr == null || index < 0 || index >= arr.length) {
-//
-//			return arr;
-//		}
-//
-//		int[] anotherArray = new int[arr.length - 1];
-//
-//		for (int i = 0, k = 0; i < arr.length; i++) {
-//
-//			if (i == index) {
-//				continue;
-//			}
-//
-//			anotherArray[k++] = arr[i];
-//		}
-//
-//		return anotherArray;
-//	}
-
 //	public ArrayList<Integer> dijkstra(Vertex src, Vertex end) {
 //		ArrayList<Integer> rArrayList = new ArrayList<>();
 //		ArrayList<Integer> lArrayList = new ArrayList<>();
 //		ArrayList<Integer> pArrayList = new ArrayList<>();
+//		ArrayList<Boolean> checkArrayList = new ArrayList<>();
 //
 //		for (int i = 0; i < vertexs.size(); i++) {
 //			rArrayList.add(0);
 //			lArrayList.add(Integer.MAX_VALUE);
 //			pArrayList.add(-1);
+//			checkArrayList.add(true);
 //		}
 //
 //		for (int i = 0; i < vertexs.size(); i++) {
 //			rArrayList.set(i, i);
 //		}
 //		lArrayList.set(src.getIndex(), 0);
-//		pArrayList.set(0, src.index);
+////		pArrayList.set(0, src.index);
 //
 //		int value;
 //		while (rArrayList.size() != 0) {
 //
-//			for (int i = 0; i < rArrayList.size(); i++) {
-//				
+//			value = minDis(lArrayList, checkArrayList);
+//			checkArrayList.set(value, false);
+////
+////			if (value == end.getIndex()) {
+////				break;
+////			}
+//			for(int i=0; i<rArrayList.size();i++) {
+//				if(rArrayList.get(i)==value) {
+//					rArrayList.remove(i);
+//				}
 //			}
-//			value = Collections.min(lArrayList);
-//			if (value == end.getIndex()) {
-//				rArrayList.remove(value);
-//				break;
-//			}
-//			rArrayList.remove(value);
 //			ArrayList<Integer> dskeArrayList = new ArrayList<>();
 //			for (int i = 0; i < vertexs.size(); i++) {
 //				if (mtkArrayList.get(value).get(i) != 0) {
@@ -359,26 +345,41 @@ public class Graph {
 //		}
 //		return pArrayList;
 //	}
-//
-//	private ArrayList<Integer> getdsKe(int vertex) {
-//		ArrayList<Integer> resArrayList = new ArrayList<>();
-//		for (int i = 0; i < vertexs.size(); i++) {
-//			if (vertexs.get(i).getIndex() == vertex) {
-//				System.out.println(vertexs.get(i).getDsKe().toString());
-//				for (Vertex v : vertexs.get(i).getDsKe()) {
-//					resArrayList.add(v.getIndex());
-//				}
-//			}
-//		}
-//		return resArrayList;
-//	}
+
+
+	private int minDis(ArrayList<Integer> lArrayList, ArrayList<Boolean> checkArrayList) {
+		int index = -1;
+		int min = Integer.MAX_VALUE;
+		for (int i = 0; i < lArrayList.size(); i++) {
+			if (checkArrayList.get(i) == true && lArrayList.get(i) < min) {
+				min = lArrayList.get(i);
+				index = i;
+			}
+		}
+
+		return index;
+	}
+
+	public ArrayList<Integer> getDskInt(int index) {
+		ArrayList<Integer> reArrayList = new ArrayList<Integer>();
+		for (int j=0;j<vertexs.size();j++) {
+			if (vertexs.get(j).getIndex() == index) {
+				Vertex vertex=vertexs.get(j);
+				for(int i=0;i<vertex.getDsKe().size();i++) {
+					int a=vertex.getDsKe().get(i).getIndex();
+					reArrayList.add(a);
+				}
+			}
+		}
+		return reArrayList;
+	}
 
 	public static void main(String[] args) {
 		Ellipse2D ellipse2d = new Ellipse2D.Double(1, 1, 11, 11);
-		Vertex v1 = new Vertex(0, new ArrayList<>(), ellipse2d, false);
-		Vertex v2 = new Vertex(1, new ArrayList<>(), ellipse2d, false);
-		Vertex v3 = new Vertex(2, new ArrayList<>(), ellipse2d, false);
-		Vertex v4 = new Vertex(3, new ArrayList<>(), ellipse2d, false);
+		Vertex v1 = new Vertex(0, new ArrayList<Vertex>(), ellipse2d, false);
+		Vertex v2 = new Vertex(1, new ArrayList<Vertex>(), ellipse2d, false);
+		Vertex v3 = new Vertex(2, new ArrayList<Vertex>(), ellipse2d, false);
+		Vertex v4 = new Vertex(3, new ArrayList<Vertex>(), ellipse2d, false);
 
 		Graph g = new Graph();
 		g.addVertex(ellipse2d);
@@ -411,7 +412,9 @@ public class Graph {
 //		g.showMtk(g.mtkArrayList);
 //		g.bfs(2);
 		System.out.println("-----");
-		g.dijkstra(v1, v3);
-		System.out.println(g.dijkstra(v1, v3).toString());
+//		g.dijkstra(v1, v3);
+//		System.out.println(g.dijkstra(v1, v3).toString());
+		System.out.println(g.getDskInt(2).toString());
+		System.out.println(v2.getDsKe().toString());
 	}
 }

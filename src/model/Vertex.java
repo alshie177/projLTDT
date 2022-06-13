@@ -9,8 +9,9 @@ public class Vertex {
 	Ellipse2D ellipse;
 	boolean isTravel = false;
 	boolean existEdge;
+	boolean selected = false;
 
-	public Vertex( Integer index, ArrayList<Vertex> dsKe, Ellipse2D ellipse, boolean existEgde) {
+	public Vertex(Integer index, ArrayList<Vertex> dsKe, Ellipse2D ellipse, boolean existEgde) {
 		this.index = index;
 		this.dsKe = dsKe;
 		this.ellipse = ellipse;
@@ -56,4 +57,13 @@ public class Vertex {
 	public void setTravel(boolean isTravel) {
 		this.isTravel = isTravel;
 	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+	
 }

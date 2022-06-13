@@ -19,7 +19,7 @@ import Controller.GListenter;
 public class ToolBarPanel extends JPanel {
 	private PaintPanel paint;
 	private JButton openButton, saveButton, buttonNew;
-	private JButton addVertexButton, addEdgeButton, delVertexButton, delEdgeButton, moveButton;
+	private JButton addVertexButton, addEdgeButton, delVertexButton, delEdgeButton;
 	private JButton dFSButton, bFSButton, dijstraButton;
 	private JToolBar toolBar;
 	private JRadioButton directedButton;
@@ -89,48 +89,48 @@ public class ToolBarPanel extends JPanel {
 		delEdgeButton.addActionListener(actionListener);
 		delEdgeButton.setActionCommand("delEdge");
 
-		moveButton = new JButton();
-		moveButton.setIcon(
-				new ImageIcon(Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("move.png"))));
-		moveButton.setActionCommand("move");
-		
 		JPanel graphPanel = new JPanel();
 		JToolBar graphToolBar = new JToolBar();
 		graphPanel.add(addVertexButton);
 		graphPanel.add(addEdgeButton);
 		graphPanel.add(delVertexButton);
 		graphPanel.add(delEdgeButton);
-		graphPanel.add(moveButton);
 		graphToolBar.add(graphPanel);
 
 		// Search ToolBar
 		dFSButton = new JButton();
 		dFSButton.setIcon(
 				new ImageIcon(Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("DFS.png"))));
+		dFSButton.setPressedIcon(
+				new ImageIcon(Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("DFSClcik.png"))));
 		dFSButton.addActionListener(actionListener);
 		dFSButton.setBorder(BorderFactory.createEmptyBorder());
 		dFSButton.setContentAreaFilled(false);
 		dFSButton.setFocusPainted(false);
 		dFSButton.setActionCommand("dFS");
-		
+
 		bFSButton = new JButton();
 		bFSButton.setIcon(
 				new ImageIcon(Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("BFS.png"))));
+		bFSButton.setPressedIcon(
+				new ImageIcon(Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("BFSClick.png"))));
 		bFSButton.setBorder(BorderFactory.createEmptyBorder());
 		bFSButton.setContentAreaFilled(false);
 		bFSButton.setFocusPainted(false);
 		bFSButton.addActionListener(actionListener);
 		bFSButton.setActionCommand("bFS");
-		
+
 		dijstraButton = new JButton();
 		dijstraButton.setIcon(
 				new ImageIcon(Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("Dijktra.png"))));
+		dijstraButton.setPressedIcon(new ImageIcon(
+				Toolkit.getDefaultToolkit().createImage(ToolBarPanel.class.getResource("DijktraClick.png"))));
 		dijstraButton.setBorder(BorderFactory.createEmptyBorder());
 		dijstraButton.setContentAreaFilled(false);
 		dijstraButton.setFocusPainted(false);
 		dijstraButton.addActionListener(actionListener);
-		dijstraButton.setActionCommand("dijstra");
-		
+		dijstraButton.setActionCommand("dijkstra");
+
 		JPanel searchPanel = new JPanel();
 		JToolBar searchToolBar = new JToolBar();
 		searchPanel.add(dFSButton);
@@ -163,10 +163,6 @@ public class ToolBarPanel extends JPanel {
 		addVertexButton.setFocusPainted(false);
 		delEdgeButton.setFocusPainted(false);
 		delVertexButton.setFocusPainted(false);
-		moveButton.setFocusPainted(false);
-		dFSButton.setFocusPainted(false);
-		bFSButton.setFocusPainted(false);
-		dijstraButton.setFocusPainted(false);
 
 		gr.add(undirectedButton);
 		gr.add(directedButton);
@@ -175,7 +171,6 @@ public class ToolBarPanel extends JPanel {
 		this.add(graphToolBar);
 		this.add(searchToolBar);
 		this.add(toolBar);
-
 
 	}
 

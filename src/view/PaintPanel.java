@@ -1,19 +1,19 @@
 package view;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.JPanel;
 
@@ -34,7 +34,8 @@ public class PaintPanel extends JPanel {
 	private ArrayList<QuadCurve2D> curveArrayList = new ArrayList<QuadCurve2D>();
 	private boolean drag = false;
 	private ArrayList<Edge> edges = new ArrayList<Edge>();
-	private ArrayList<Shape> shapes = new ArrayList<Shape>();
+	private ArrayList<Ellipse2D> ellipse2ds = new ArrayList<Ellipse2D>();
+	private ArrayList<Vertex> vList = new ArrayList<Vertex>();
 
 	public PaintPanel() {
 		graph = new Graph();
@@ -236,12 +237,20 @@ public class PaintPanel extends JPanel {
 		this.edges = edges;
 	}
 
-	public ArrayList<Shape> getShapes() {
-		return shapes;
+	public ArrayList<Ellipse2D> getEllipse2ds() {
+		return ellipse2ds;
 	}
 
-	public void setShapes(ArrayList<Shape> shapes) {
-		this.shapes = shapes;
+	public void setEllipse2ds(ArrayList<Ellipse2D> ellipse2ds) {
+		this.ellipse2ds = ellipse2ds;
+	}
+
+	public ArrayList<Vertex> getvList() {
+		return vList;
+	}
+
+	public void setvList(ArrayList<Vertex> vList) {
+		this.vList = vList;
 	}
 
 	@Override
@@ -258,9 +267,10 @@ public class PaintPanel extends JPanel {
 				if (v.isSelected()) {
 					graphics2d.setColor(Color.gray);
 					graphics2d.fill(v.getEllipse());
+				} else {
+					graphics2d.setColor(Color.BLACK);
+					graphics2d.fill(v.getEllipse());
 				}
-				graphics2d.setColor(Color.BLACK);
-				graphics2d.fill(v.getEllipse());
 			}
 			Font font = new Font("Arial", Font.BOLD, 15);
 			FontMetrics metrics = graphics.getFontMetrics(font);
@@ -274,63 +284,71 @@ public class PaintPanel extends JPanel {
 			graphics2d.setColor(Color.BLACK);
 		}
 		for (Edge edge : graph.getEdges()) {
-			graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			graphics2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-			graphics2d.setColor(Color.BLACK);
-			if (edge.isTravel()) {
-				graphics2d.setColor(Color.orange);
-			}
-			if (isDirected() == true) {
-				double from = angleBetween(edge.getNode1(), edge.getNode2());
-				double to = angleBetween(edge.getNode1(), edge.getNode2());
-				Point2D pointFromPoint2d = getPointOnCircle(edge.getNode1(), from);
-				Point2D pointToPoint2d = getPointOnCircle(edge.getNode2(), to - 22);
-				graphics2d.draw(new Line2D.Double(pointFromPoint2d, pointToPoint2d));
-				ArrowHead arrowHead = new ArrowHead();
-				AffineTransform affineTransform = AffineTransform.getTranslateInstance(
-						pointToPoint2d.getX() - (arrowHead.getBounds().getWidth() / 2d), pointToPoint2d.getY());
-				affineTransform.rotate(from, arrowHead.getBounds2D().getCenterX(), 0);
-				arrowHead.transform(affineTransform);
-				graphics2d.draw(arrowHead);
-				Font font = new Font("Arial", Font.BOLD, 15);
-				FontMetrics metrics = graphics.getFontMetrics(font);
-				graphics.setFont(font);
-				graphics.setColor(Color.red);
-				if (edge.getLine2d() == null) {
-				} else {
-					int xString = (int) (pointFromPoint2d.getX() + ((pointToPoint2d.getX()))
-							- metrics.stringWidth(string)) / 2 + 10;
-
-					int yString = (int) (pointFromPoint2d.getY() + (pointToPoint2d.getY()) - metrics.getHeight()) / 2
-							+ 3;
-					graphics.drawString(edge.getValue() + "", xString, yString);
+			if (edge.getNode1() == edge.getNode2()) {
+			} else {
+				graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				graphics2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+				graphics2d.setColor(Color.BLACK);
+				graphics2d.setStroke(new BasicStroke(3f));
+				if (edge.isTravel()) {
+					graphics2d.setColor(Color.orange);
 				}
-			}
-			if (isUndirecred() == true) {
-				double from = angleBetween(edge.getNode1(), edge.getNode2());
-				double to = angleBetween(edge.getNode1(), edge.getNode2());
-				Point2D pointFromPoint2d = getPointOnCircle(edge.getNode1(), from);
-				Point2D pointToPoint2d = getPointOnCircle(edge.getNode2(), to - 22);
-				graphics2d.draw(new Line2D.Double(pointFromPoint2d, pointToPoint2d));
-				Font font = new Font("Arial", Font.BOLD, 15);
-				FontMetrics metrics = graphics.getFontMetrics(font);
-				graphics.setFont(font);
-				graphics.setColor(Color.red);
-				if (edge.getLine2d() == null) {
-				} else {
-					int xString = (int) (pointFromPoint2d.getX() + ((pointToPoint2d.getX()))
-							- metrics.stringWidth(string)) / 2 + 10;
+				if (isDirected() == true) {
+					double from = angleBetween(edge.getNode1(), edge.getNode2());
+					double to = angleBetween(edge.getNode1(), edge.getNode2());
+					Point2D pointFromPoint2d = getPointOnCircle(edge.getNode1(), from);
+					Point2D pointToPoint2d = getPointOnCircle(edge.getNode2(), to - 22);
+					graphics2d.draw(new Line2D.Double(pointFromPoint2d, pointToPoint2d));
+					ArrowHead arrowHead = new ArrowHead();
+					AffineTransform affineTransform = AffineTransform.getTranslateInstance(
+							pointToPoint2d.getX() - (arrowHead.getBounds().getWidth() / 2d), pointToPoint2d.getY());
+					affineTransform.rotate(from, arrowHead.getBounds2D().getCenterX(), 0);
+					arrowHead.transform(affineTransform);
+					graphics2d.draw(arrowHead);
+					Font font = new Font("Arial", Font.BOLD, 15);
+					FontMetrics metrics = graphics.getFontMetrics(font);
+					graphics.setFont(font);
+					graphics.setColor(Color.red);
+					if (edge.getLine2d() == null) {
+					} else {
+						int xString = (int) (pointFromPoint2d.getX() + ((pointToPoint2d.getX()))
+								- metrics.stringWidth(string)) / 2 + 10;
 
-					int yString = (int) (pointFromPoint2d.getY() + (pointToPoint2d.getY()) - metrics.getHeight()) / 2
-							+ 3;
-					graphics.drawString(edge.getValue() + "", xString, yString);
+						int yString = (int) (pointFromPoint2d.getY() + (pointToPoint2d.getY()) - metrics.getHeight())
+								/ 2 + 3;
+						graphics.drawString(edge.getValue() + "", xString, yString);
+					}
 				}
+				if (isUndirecred() == true) {
+					double from = angleBetween(edge.getNode1(), edge.getNode2());
+					double to = angleBetween(edge.getNode1(), edge.getNode2());
+					Point2D pointFromPoint2d = getPointOnCircle(edge.getNode1(), from);
+					Point2D pointToPoint2d = getPointOnCircle(edge.getNode2(), to - 22);
+					graphics2d.draw(new Line2D.Double(pointFromPoint2d, pointToPoint2d));
+					Font font = new Font("Arial", Font.BOLD, 15);
+					FontMetrics metrics = graphics.getFontMetrics(font);
+					graphics.setFont(font);
+					graphics.setColor(Color.red);
+					if (edge.getLine2d() == null) {
+					} else {
+						int xString = (int) (pointFromPoint2d.getX() + ((pointToPoint2d.getX()))
+								- metrics.stringWidth(string)) / 2 + 10;
 
+						int yString = (int) (pointFromPoint2d.getY() + (pointToPoint2d.getY()) - metrics.getHeight())
+								/ 2 + 3;
+						graphics.drawString(edge.getValue() + "", xString, yString);
+					}
+
+				}
 			}
 			graphics2d.setColor(Color.BLACK);
 		}
 
 		for (Edge edge : edges) {
+			graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			graphics2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			graphics2d.setColor(Color.BLACK);
+			graphics2d.setStroke(new BasicStroke(3f));
 			if (isDirected() == true) {
 				double from = angleBetween(edge.getNode1(), edge.getNode2());
 				double to = angleBetween(edge.getNode1(), edge.getNode2());
@@ -383,6 +401,27 @@ public class PaintPanel extends JPanel {
 							(pointFromPoint2d.getX() + pointToPoint2d.getX()) / 2,
 							(pointFromPoint2d.getX() + pointToPoint2d.getY()) / 2 + 5, pointToPoint2d.getX(),
 							pointToPoint2d.getY()));
+				}
+			}
+		}
+		for (Vertex v : vList) {
+			graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			graphics2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			graphics2d.setColor(Color.BLACK);
+			graphics2d.setStroke(new BasicStroke(1.5f));
+			for (Ellipse2D ellipse2d : ellipse2ds) {
+				graphics2d.draw(new Ellipse2D.Double((v.getEllipse().getX() - v.getEllipse().getWidth() * 1.0),
+						(v.getEllipse().getCenterY() - v.getEllipse().getHeight() / 2 + 15), 50, 25));
+				for (Edge edge : graph.getEdges()) {
+					Font font = new Font("Arial", Font.BOLD, 15);
+					FontMetrics metrics = graphics.getFontMetrics(font);
+					graphics.setFont(font);
+					graphics.setColor(Color.red);
+					int xString = (int) (ellipse2d.getX() + (ellipse2d.getWidth() - metrics.stringWidth(string)) / 2)
+							- 4;
+					int yString = (int) (ellipse2d.getY() + (ellipse2d.getHeight() - metrics.getHeight()) / 2) + 14;
+					graphics.drawString(edge.getValue() + "", xString, yString);
+					graphics2d.setColor(Color.BLACK);
 				}
 			}
 		}

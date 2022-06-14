@@ -287,6 +287,33 @@ public class Graph {
 		mtkData.removeAll(mtkData);
 	}
 
+	public void delUndirectedEdge(Edge edge) {
+		edges.remove(edge);
+		mtkArrayList.get(edge.getNode1().getIndex()).set(edge.getNode2().getIndex(), 0);
+		mtkArrayList.get(edge.getNode2().getIndex()).set(edge.getNode1().getIndex(), 0);
+
+		mtkData.get(edge.getNode1().getIndex()).set(edge.getNode2().getIndex(), 0);
+		mtkData.get(edge.getNode2().getIndex()).set(edge.getNode1().getIndex(), 0);
+
+		edge.getNode1().getDsKe().remove(edge.getNode2());
+		edge.getNode2().getDsKe().remove(edge.getNode1());
+	}
+
+	public void delDirectedEdge(Edge edge) {
+		edges.remove(edge);
+//		if (mtkArrayList.get(edge.getNode1().getIndex()).get(edge.getNode2().getIndex()) != 0) {
+			mtkData.get(edge.getNode1().getIndex()).set(edge.getNode2().getIndex(), 0);
+			mtkArrayList.get(edge.getNode1().getIndex()).set(edge.getNode2().getIndex(), 0);
+			edge.getNode2().getDsKe().remove(edge.getNode1());
+
+//		} else {
+//			if (mtkArrayList.get(edge.getNode2().getIndex()).get(edge.getNode1().getIndex()) != 0) {
+//				mtkData.get(edge.getNode2().getIndex()).set(edge.getNode1().getIndex(), 0);
+//				mtkArrayList.get(edge.getNode2().getIndex()).set(edge.getNode1().getIndex(), 0);
+//			}
+//		}
+	}
+
 //	public ArrayList<Integer> dijkstra(Vertex src, Vertex end) {
 //		ArrayList<Integer> rArrayList = new ArrayList<>();
 //		ArrayList<Integer> lArrayList = new ArrayList<>();
@@ -346,7 +373,6 @@ public class Graph {
 //		return pArrayList;
 //	}
 
-
 	private int minDis(ArrayList<Integer> lArrayList, ArrayList<Boolean> checkArrayList) {
 		int index = -1;
 		int min = Integer.MAX_VALUE;
@@ -362,11 +388,11 @@ public class Graph {
 
 	public ArrayList<Integer> getDskInt(int index) {
 		ArrayList<Integer> reArrayList = new ArrayList<Integer>();
-		for (int j=0;j<vertexs.size();j++) {
+		for (int j = 0; j < vertexs.size(); j++) {
 			if (vertexs.get(j).getIndex() == index) {
-				Vertex vertex=vertexs.get(j);
-				for(int i=0;i<vertex.getDsKe().size();i++) {
-					int a=vertex.getDsKe().get(i).getIndex();
+				Vertex vertex = vertexs.get(j);
+				for (int i = 0; i < vertex.getDsKe().size(); i++) {
+					int a = vertex.getDsKe().get(i).getIndex();
 					reArrayList.add(a);
 				}
 			}

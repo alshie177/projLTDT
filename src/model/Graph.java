@@ -301,77 +301,77 @@ public class Graph {
 
 	public void delDirectedEdge(Edge edge) {
 		edges.remove(edge);
-//		if (mtkArrayList.get(edge.getNode1().getIndex()).get(edge.getNode2().getIndex()) != 0) {
-			mtkData.get(edge.getNode1().getIndex()).set(edge.getNode2().getIndex(), 0);
-			mtkArrayList.get(edge.getNode1().getIndex()).set(edge.getNode2().getIndex(), 0);
-			edge.getNode2().getDsKe().remove(edge.getNode1());
-
-//		} else {
-//			if (mtkArrayList.get(edge.getNode2().getIndex()).get(edge.getNode1().getIndex()) != 0) {
-//				mtkData.get(edge.getNode2().getIndex()).set(edge.getNode1().getIndex(), 0);
-//				mtkArrayList.get(edge.getNode2().getIndex()).set(edge.getNode1().getIndex(), 0);
-//			}
-//		}
+		mtkData.get(edge.getNode1().getIndex()).set(edge.getNode2().getIndex(), 0);
+		mtkArrayList.get(edge.getNode1().getIndex()).set(edge.getNode2().getIndex(), 0);
+		edge.getNode2().getDsKe().remove(edge.getNode1());
+		showMtk(mtkArrayList);
 	}
 
-//	public ArrayList<Integer> dijkstra(Vertex src, Vertex end) {
-//		ArrayList<Integer> rArrayList = new ArrayList<>();
-//		ArrayList<Integer> lArrayList = new ArrayList<>();
-//		ArrayList<Integer> pArrayList = new ArrayList<>();
-//		ArrayList<Boolean> checkArrayList = new ArrayList<>();
+	private ArrayList<Integer> shortDistantList(Vertex src) {
+		ArrayList<Integer> rArrayList = new ArrayList<>();
+		ArrayList<Integer> lArrayList = new ArrayList<>();
+		ArrayList<Integer> pArrayList = new ArrayList<>();
+		ArrayList<Boolean> checkArrayList = new ArrayList<>();
+
+		// gán giá trị cho arrl
+		for (int i = 0; i < vertexs.size(); i++) {
+			rArrayList.add(0);
+			lArrayList.add(Integer.MAX_VALUE);
+			pArrayList.add(-1);
+			checkArrayList.add(true);
+		}
+
+		// đặt đỉnh cho R= tập đỉnh
+		for (int i = 0; i < vertexs.size(); i++) {
+			rArrayList.set(i, i);
+		}
+
+		// gán kc bắt đầu là 0
+		lArrayList.set(src.getIndex(), 0);
+
+		int value;
+		while (rArrayList.size() != 0) {
+
+			// gán value là đỉnh có L[value] nhỏ nhất
+			value = minDis(lArrayList, checkArrayList);
+			checkArrayList.set(value, false);
 //
-//		for (int i = 0; i < vertexs.size(); i++) {
-//			rArrayList.add(0);
-//			lArrayList.add(Integer.MAX_VALUE);
-//			pArrayList.add(-1);
-//			checkArrayList.add(true);
-//		}
-//
-//		for (int i = 0; i < vertexs.size(); i++) {
-//			rArrayList.set(i, i);
-//		}
-//		lArrayList.set(src.getIndex(), 0);
-////		pArrayList.set(0, src.index);
-//
-//		int value;
-//		while (rArrayList.size() != 0) {
-//
-//			value = minDis(lArrayList, checkArrayList);
-//			checkArrayList.set(value, false);
-////
-////			if (value == end.getIndex()) {
-////				break;
-////			}
-//			for(int i=0; i<rArrayList.size();i++) {
-//				if(rArrayList.get(i)==value) {
-//					rArrayList.remove(i);
-//				}
+//			if (value == end.getIndex()) {
+//				break;
 //			}
-//			ArrayList<Integer> dskeArrayList = new ArrayList<>();
-//			for (int i = 0; i < vertexs.size(); i++) {
-//				if (mtkArrayList.get(value).get(i) != 0) {
-//					dskeArrayList.add(i);
-//				} else {
-//					if (mtkArrayList.get(i).get(value) != 0) {
-//						dskeArrayList.add(i);
-//					}
-//				}
-//			}
-//			ArrayList<Integer> datArrayList = new ArrayList<>();
-//			for (int i = 0; i < rArrayList.size(); i++) {
-//				if (rArrayList.contains(dskeArrayList.get(i))) {
-//					datArrayList.add(dskeArrayList.get(i));
-//				}
-//			}
-//			for (Integer i : datArrayList) {
-//				if (lArrayList.get(i) > lArrayList.get(value) + mtkArrayList.get(value).get(i)) {
-//					lArrayList.set(i, lArrayList.get(value) + mtkArrayList.get(value).get(i));
-//					pArrayList.set(i, value);
-//				}
-//			}
-//		}
-//		return pArrayList;
-//	}
+			// xóa đỉnh value ra khỏi R
+			for (int i = 0; i < rArrayList.size(); i++) {
+				if (rArrayList.get(i) == value) {
+					rArrayList.remove(i);
+				}
+			}
+			ArrayList<Integer> dskeArrayList = new ArrayList<Integer>();
+			for (int i = 0; i < vertexs.size(); i++) {
+				if (mtkArrayList.get(value).get(i) != 0) {
+					dskeArrayList.add(i);
+				} else {
+					if (mtkArrayList.get(i).get(value) != 0) {
+						dskeArrayList.add(i);
+					}
+				}
+			}
+			ArrayList<Integer> datArrayList = new ArrayList<Integer>();
+			for (int i = 0; i < rArrayList.size(); i++) {
+				for (int j = 0; j < dskeArrayList.size(); j++) {
+					if (rArrayList.get(i) == dskeArrayList.get(j)) {
+						datArrayList.add(dskeArrayList.get(j));
+					}
+				}
+			}
+			for (int i : datArrayList) {
+				if (lArrayList.get(i) > lArrayList.get(value) + mtkArrayList.get(value).get(i)) {
+					lArrayList.set(i, lArrayList.get(value) + mtkArrayList.get(value).get(i));
+					pArrayList.set(i, value);
+				}
+			}
+		}
+		return pArrayList;
+	}
 
 	private int minDis(ArrayList<Integer> lArrayList, ArrayList<Boolean> checkArrayList) {
 		int index = -1;
@@ -386,18 +386,26 @@ public class Graph {
 		return index;
 	}
 
-	public ArrayList<Integer> getDskInt(int index) {
-		ArrayList<Integer> reArrayList = new ArrayList<Integer>();
-		for (int j = 0; j < vertexs.size(); j++) {
-			if (vertexs.get(j).getIndex() == index) {
-				Vertex vertex = vertexs.get(j);
-				for (int i = 0; i < vertex.getDsKe().size(); i++) {
-					int a = vertex.getDsKe().get(i).getIndex();
-					reArrayList.add(a);
-				}
+	public ArrayList<Integer> dijkstra(Vertex srcVertex, Vertex endVertex) {
+		ArrayList<Integer> dataArrayList = new ArrayList<Integer>();
+		ArrayList<Integer> resArrayList = new ArrayList<Integer>();
+		ArrayList<Integer> cloneArrayList = (ArrayList<Integer>) shortDistantList(srcVertex).clone();
+
+		dataArrayList.add(endVertex.getIndex());
+		for (int i = cloneArrayList.size() - 1; i > 0;) {
+			dataArrayList.add(cloneArrayList.get(i));
+			i = cloneArrayList.get(i);
+			if (i == srcVertex.getIndex()) {
+				break;
 			}
 		}
-		return reArrayList;
+
+		for (int i = dataArrayList.size() - 1; i > -1; i--) {
+			resArrayList.add(dataArrayList.get(i));
+		}
+
+		System.out.println(resArrayList.toString());
+		return resArrayList;
 	}
 
 	public static void main(String[] args) {
@@ -406,18 +414,26 @@ public class Graph {
 		Vertex v2 = new Vertex(1, new ArrayList<Vertex>(), ellipse2d, false);
 		Vertex v3 = new Vertex(2, new ArrayList<Vertex>(), ellipse2d, false);
 		Vertex v4 = new Vertex(3, new ArrayList<Vertex>(), ellipse2d, false);
+		Vertex v5 = new Vertex(4, new ArrayList<Vertex>(), ellipse2d, false);
+		Vertex v6 = new Vertex(5, new ArrayList<Vertex>(), ellipse2d, false);
+		Vertex v7 = new Vertex(6, new ArrayList<Vertex>(), ellipse2d, false);
 
 		Graph g = new Graph();
 		g.addVertex(ellipse2d);
 		g.addVertex(ellipse2d);
 		g.addVertex(ellipse2d);
 		g.addVertex(ellipse2d);
-		g.addUnderectedEdge(v1, v2, null, 1);
-		g.addUnderectedEdge(v1, v3, null, 5);
-		g.addUnderectedEdge(v1, v4, null, 7);
-		g.addUnderectedEdge(v2, v3, null, 3);
-		g.addUnderectedEdge(v2, v4, null, 2);
-//		g.addUnderectedEdge(v3, v4, null, 1);
+		g.addVertex(ellipse2d);
+		g.addVertex(ellipse2d);
+		g.addVertex(ellipse2d);
+		g.addUnderectedEdge(v1, v2, null, 8);
+		g.addUnderectedEdge(v2, v4, null, 1);
+		g.addUnderectedEdge(v2, v3, null, 4);
+		g.addUnderectedEdge(v3, v6, null, 3);
+		g.addUnderectedEdge(v5, v4, null, 5);
+		g.addUnderectedEdge(v5, v6, null, 6);
+		g.addUnderectedEdge(v5, v7, null, 3);
+		g.addUnderectedEdge(v7, v6, null, 5);
 		ArrayList<Integer> a1 = new ArrayList<>();
 		a1.add(1);
 		a1.add(1);
@@ -439,8 +455,10 @@ public class Graph {
 //		g.bfs(2);
 		System.out.println("-----");
 //		g.dijkstra(v1, v3);
-//		System.out.println(g.dijkstra(v1, v3).toString());
-		System.out.println(g.getDskInt(2).toString());
-		System.out.println(v2.getDsKe().toString());
+		System.out.println(g.shortDistantList(v1).toString());
+		System.out.println("-----");
+		System.out.println(g.dijkstra(v2, v7).toString());
+//		System.out.println(g.getDskInt(2).toString());
+//		System.out.println(v2.getDsKe().toString());
 	}
 }

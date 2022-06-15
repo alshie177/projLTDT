@@ -7,6 +7,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Taskbar;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
@@ -14,8 +15,11 @@ import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JPanel;
+import javax.swing.text.StyledEditorKit.ForegroundAction;
 
 import Controller.PaintListener;
 import model.Edge;
@@ -27,6 +31,7 @@ public class PaintPanel extends JPanel {
 	private static Graph graph;
 	private static Vertex selected1;
 	private static Vertex selected2;
+	private static Edge selectedEdge;
 	private boolean directed = false;
 	private boolean undirecred = false;
 	private String string = "";
@@ -253,6 +258,41 @@ public class PaintPanel extends JPanel {
 		this.vList = vList;
 	}
 
+	public static Edge getSelectedEdge() {
+		return selectedEdge;
+	}
+
+	public static void setSelectedEdge(Edge selectedEdge) {
+		PaintPanel.selectedEdge = selectedEdge;
+	}
+
+	int i = 0;
+
+//	public void animation() {
+//		Timer timer = new Timer();
+//		Task task = new Task();
+//		timer.schedule(task, 1000);
+//	}
+//
+//	private class Task extends TimerTask {
+//		Vertex vertex;
+//
+//		public Task() {
+//		}
+//
+//		@Override
+//		public void run() {
+////			for(Vertex vertex:graph.getVertexs()) {
+////				if(vertex.isTravel()) {
+//			Graphics2D graphics2d = (Graphics2D) getGraphics();
+//			graphics2d.setColor(Color.yellow);
+//			if(i<6) graphics2d.fill(graph.getVertexs().get(i).getEllipse());
+//			i++;
+////				}
+////			}
+//		}
+//	}
+
 	@Override
 	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
@@ -263,6 +303,7 @@ public class PaintPanel extends JPanel {
 			if (v.isTravel()) {
 				graphics2d.setColor(Color.YELLOW);
 				graphics2d.fill(v.getEllipse());
+//				animation();
 			} else {
 				if (v.isSelected()) {
 					graphics2d.setColor(Color.gray);
@@ -294,23 +335,23 @@ public class PaintPanel extends JPanel {
 					graphics2d.setColor(Color.orange);
 				}
 				if (isDirected() == true) {
-					double from = angleBetween(edge.getNode1(), edge.getNode2());
-					double to = angleBetween(edge.getNode1(), edge.getNode2());
-					Point2D pointFromPoint2d = getPointOnCircle(edge.getNode1(), from);
-					Point2D pointToPoint2d = getPointOnCircle(edge.getNode2(), to - 22);
-					graphics2d.draw(new Line2D.Double(pointFromPoint2d, pointToPoint2d));
-					ArrowHead arrowHead = new ArrowHead();
-					AffineTransform affineTransform = AffineTransform.getTranslateInstance(
-							pointToPoint2d.getX() - (arrowHead.getBounds().getWidth() / 2d), pointToPoint2d.getY());
-					affineTransform.rotate(from, arrowHead.getBounds2D().getCenterX(), 0);
-					arrowHead.transform(affineTransform);
-					graphics2d.draw(arrowHead);
-					Font font = new Font("Arial", Font.BOLD, 15);
-					FontMetrics metrics = graphics.getFontMetrics(font);
-					graphics.setFont(font);
-					graphics.setColor(Color.red);
 					if (edge.getLine2d() == null) {
 					} else {
+						double from = angleBetween(edge.getNode1(), edge.getNode2());
+						double to = angleBetween(edge.getNode1(), edge.getNode2());
+						Point2D pointFromPoint2d = getPointOnCircle(edge.getNode1(), from);
+						Point2D pointToPoint2d = getPointOnCircle(edge.getNode2(), to - 22);
+						graphics2d.draw(new Line2D.Double(pointFromPoint2d, pointToPoint2d));
+						ArrowHead arrowHead = new ArrowHead();
+						AffineTransform affineTransform = AffineTransform.getTranslateInstance(
+								pointToPoint2d.getX() - (arrowHead.getBounds().getWidth() / 2d), pointToPoint2d.getY());
+						affineTransform.rotate(from, arrowHead.getBounds2D().getCenterX(), 0);
+						arrowHead.transform(affineTransform);
+						graphics2d.draw(arrowHead);
+						Font font = new Font("Arial", Font.BOLD, 15);
+						FontMetrics metrics = graphics.getFontMetrics(font);
+						graphics.setFont(font);
+						graphics.setColor(Color.red);
 						int xString = (int) (pointFromPoint2d.getX() + ((pointToPoint2d.getX()))
 								- metrics.stringWidth(string)) / 2 + 10;
 
@@ -360,6 +401,12 @@ public class PaintPanel extends JPanel {
 								(pointToPoint2d.getX() + pointFromPoint2d.getX()) / 2 + 5,
 								(pointToPoint2d.getX() + pointFromPoint2d.getY()) / 2 + 5, pointToPoint2d.getX(),
 								pointToPoint2d.getY()));
+						ArrowHead arrowHead = new ArrowHead();
+						AffineTransform affineTransform = AffineTransform.getTranslateInstance(
+								pointToPoint2d.getX() - (arrowHead.getBounds().getWidth() / 2d), pointToPoint2d.getY());
+						affineTransform.rotate(from, arrowHead.getBounds2D().getCenterX(), 0);
+						arrowHead.transform(affineTransform);
+						graphics2d.draw(arrowHead);
 						Font font = new Font("Arial", Font.BOLD, 15);
 						FontMetrics metrics = graphics.getFontMetrics(font);
 						graphics.setFont(font);

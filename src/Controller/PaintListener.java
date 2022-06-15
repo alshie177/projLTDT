@@ -119,6 +119,7 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 								paintPanel.setTypeButtonString("");
 								System.out.println("Edge is available");
 								paintPanel.repaint();
+								paintPanel.resetSelected();
 								break;
 							}
 							if (paintPanel.isUndirecred() == true && paintPanel.getSelected1().isExistEdge() == true
@@ -146,6 +147,7 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 								isFocus = false;
 								paintPanel.setTypeButtonString("");
 								paintPanel.repaint();
+								paintPanel.resetSelected();
 								break;
 							}
 							if (paintPanel.isUndirecred() == true) {
@@ -172,6 +174,7 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 									isFocus = false;
 									paintPanel.setTypeButtonString("");
 									paintPanel.repaint();
+									paintPanel.resetSelected();
 									return;
 								}
 								paintPanel.getGraph().addUnderectedEdge(paintPanel.getSelected1(),
@@ -194,6 +197,7 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 								System.out.println("Edge is available");
 //								paintPanel.getGraph().showEdge();
 								paintPanel.repaint();
+								paintPanel.resetSelected();
 								break;
 							}
 							if (paintPanel.isDirected() == true
@@ -204,6 +208,7 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 								paintPanel.setTypeButtonString("");
 								paintPanel.setSelected1(null);
 								paintPanel.setSelected2(null);
+								paintPanel.resetSelected();
 								break;
 							}
 							if (paintPanel.isDirected() == true && paintPanel.getSelected1().isExistEdge() == true
@@ -256,6 +261,7 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 								isFocus = false;
 								paintPanel.setTypeButtonString("");
 								paintPanel.repaint();
+								paintPanel.resetSelected();
 								break;
 							}
 							if (paintPanel.isDirected() == true) {
@@ -281,6 +287,7 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 									isFocus = false;
 									paintPanel.setTypeButtonString("");
 									paintPanel.repaint();
+									paintPanel.resetSelected();
 									return;
 								}
 								paintPanel.getGraph().addDerectedEdge(paintPanel.getSelected1(),
@@ -312,6 +319,7 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 								paintPanel.setTypeButtonString("");
 								paintPanel.setSelected1(null);
 								paintPanel.setSelected2(null);
+								paintPanel.resetSelected();
 								break;
 							}
 						}
@@ -355,6 +363,39 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 			}
 			break;
 		}
+		case "dijkstra": {
+			for (int i = 0; i < paintPanel.getGraph().getVertexs().size(); i++) {
+				if (paintPanel.getGraph().getVertexs().get(i).getEllipse().contains(e.getX(), e.getY())) {
+					if (paintPanel.getSelected1() == null) {
+						paintPanel.setSelected1(paintPanel.getGraph().getVertexs().get(i));
+//						System.out.println("1 "+paintPanel.getGraph().getVertexs().get(i).getIndex());
+						paintPanel.getSelected1().setSelected(true);
+						paintPanel.repaint();
+						break;
+					} else {
+						if (paintPanel.getSelected1() != paintPanel.getSelected2()) {
+							paintPanel.setSelected2(paintPanel.getGraph().getVertexs().get(i));
+//							System.out.println("2 "+paintPanel.getGraph().getVertexs().get(i).getIndex());
+							paintPanel.getSelected2().setSelected(true);
+							paintPanel.repaint();
+							ArrayList<Integer> result = paintPanel.getGraph().dijkstra(paintPanel.getSelected1(),
+									paintPanel.getSelected2());
+							paintPanel.setTraveled(result);
+							paintPanel.getSelected1().setSelected(false);
+							paintPanel.getSelected2().setSelected(false);
+							paintPanel.setSelected1(null);
+							paintPanel.setSelected2(null);
+							paintPanel.setTypeButtonString("");
+
+						}
+
+					}
+					break;
+				}
+
+			}
+			break;
+		}
 
 		case "bFS": {
 			for (int i = 0; i < paintPanel.getGraph().getVertexs().size(); i++) {
@@ -375,8 +416,85 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 			}
 			break;
 		}
-		case "delEdge":	{
-			
+		case "delEdge": {
+			for (int i = 0; i < paintPanel.getGraph().getEdges().size(); i++) {
+				if (paintPanel.getGraph().getEdges().get(i).getLine2d() == null) {
+				} else {
+					if (paintPanel.getGraph().getEdges().get(i).getLine2d().intersects(e.getX(), e.getY(), 30, 30)) {
+						paintPanel.setSelectedEdge(paintPanel.getGraph().getEdges().get(i));
+						if (paintPanel.isDirected()) {
+							paintPanel.getGraph().delDirectedEdge(paintPanel.getSelectedEdge());
+							paintPanel.repaint();
+							paintPanel.setSelectedEdge(null);
+							paintPanel.setTypeButtonString("");
+							break;
+						}
+						if (paintPanel.isUndirecred()) {
+							paintPanel.getGraph().delUndirectedEdge(paintPanel.getSelectedEdge());
+							paintPanel.repaint();
+							paintPanel.setSelectedEdge(null);
+							paintPanel.setTypeButtonString("");
+							break;
+						}
+					}
+				}
+			}
+			for (int i = 0; i < paintPanel.getEdges().size(); i++) {
+				for (int j = 0; j < paintPanel.getCurveArrayList().size(); j++) {
+					if (paintPanel.getCurveArrayList().get(j).getBounds().intersects(e.getX(), e.getY(), 30, 30)) {
+						if (paintPanel.isDirected()) {
+							if (paintPanel.getGraph().getMtkArrayList()
+									.get(paintPanel.getEdges().get(i).getNode1().getIndex())
+									.get(paintPanel.getEdges().get(i).getNode2().getIndex()) != 0) {
+								paintPanel.getCurveArrayList().remove(paintPanel.getCurveArrayList().get(j));
+								paintPanel.getEdges().remove(paintPanel.getEdges().get(i));
+								paintPanel.getGraph().delDirectedEdge(paintPanel.getEdges().get(i));
+								for (Edge edge : paintPanel.getEdges()) {
+									if (edge == paintPanel.getEdges().get(i)) {
+										edge.getNode1().setExistEdge(false);
+										edge.getNode2().setExistEdge(false);
+									}
+								}
+								for (Edge edge : paintPanel.getEdges()) {
+									if (edge == paintPanel.getEdges().get(i)) {
+										edge.getNode1().setExistEdge(false);
+										edge.getNode2().setExistEdge(false);
+									}
+								}
+								paintPanel.getEdges().get(i).getNode1().setExistEdge(false);
+								paintPanel.getEdges().get(i).getNode2().setExistEdge(false);
+								paintPanel.repaint();
+								paintPanel.setTypeButtonString("");
+								break;
+							} else {
+								paintPanel.getCurveArrayList().remove(paintPanel.getCurveArrayList().get(j));
+								paintPanel.getEdges().remove(paintPanel.getEdges().get(i));
+								paintPanel.getEdges().get(i).getNode1().setExistEdge(false);
+								paintPanel.getEdges().get(i).getNode2().setExistEdge(false);
+								paintPanel.repaint();
+								paintPanel.setTypeButtonString("");
+								break;
+							}
+						}
+						if (paintPanel.isUndirecred()) {
+							paintPanel.getCurveArrayList().remove(paintPanel.getCurveArrayList().get(j));
+							paintPanel.getEdges().remove(paintPanel.getEdges().get(i));
+							for (Edge edge : paintPanel.getEdges()) {
+								if (edge == paintPanel.getEdges().get(i)) {
+									edge.getNode1().setExistEdge(false);
+									edge.getNode2().setExistEdge(false);
+								}
+							}
+							paintPanel.getEdges().get(i).getNode1().setExistEdge(false);
+							paintPanel.getEdges().get(i).getNode2().setExistEdge(false);
+							paintPanel.repaint();
+							paintPanel.setTypeButtonString("");
+							break;
+						}
+					}
+				}
+			}
+			break;
 		}
 		case "":
 		}

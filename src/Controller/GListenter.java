@@ -182,6 +182,11 @@ public class GListenter implements ActionListener {
 				}
 			}
 		}
+		if(inputString.equals("dijkstra")) {
+			paintPanel.resetTraved();
+			paintPanel.repaint();
+			paintPanel.setTypeButtonString("dijkstra");
+		}
 	}
 
 	public void save(String nameString) {

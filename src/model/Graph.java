@@ -3,9 +3,7 @@ package model;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
-import java.util.Set;
 import java.util.Stack;
 
 public class Graph {
@@ -257,6 +255,14 @@ public class Graph {
 		return null;
 	}
 
+	public ArrayList<ArrayList<Integer>> getMtkData() {
+		return mtkData;
+	}
+
+	public void setMtkData(ArrayList<ArrayList<Integer>> mtkData) {
+		this.mtkData = mtkData;
+	}
+
 	public void addDerectedEdge(Vertex diemdau, Vertex diemcuoi, Line2D line2d, int value) {
 		mtkArrayList.get(diemdau.index).set(diemcuoi.index, value);
 
@@ -370,6 +376,7 @@ public class Graph {
 				}
 			}
 		}
+		System.out.println(pArrayList.toString());
 		return pArrayList;
 	}
 
@@ -389,19 +396,34 @@ public class Graph {
 	public ArrayList<Integer> dijkstra(Vertex srcVertex, Vertex endVertex) {
 		ArrayList<Integer> dataArrayList = new ArrayList<Integer>();
 		ArrayList<Integer> resArrayList = new ArrayList<Integer>();
-		ArrayList<Integer> cloneArrayList = (ArrayList<Integer>) shortDistantList(srcVertex).clone();
 
-		dataArrayList.add(endVertex.getIndex());
-		for (int i = cloneArrayList.size() - 1; i > 0;) {
-			dataArrayList.add(cloneArrayList.get(i));
-			i = cloneArrayList.get(i);
-			if (i == srcVertex.getIndex()) {
-				break;
+		if (endVertex.getIndex() > srcVertex.getIndex()) {
+			ArrayList<Integer> cloneArrayList = (ArrayList<Integer>) shortDistantList(srcVertex).clone();
+			dataArrayList.add(endVertex.getIndex());
+			for (int i = endVertex.getIndex(); i > 0;) {
+				dataArrayList.add(cloneArrayList.get(i));
+				i = cloneArrayList.get(i);
+				if (i == srcVertex.getIndex()) {
+					break;
+				}
 			}
-		}
 
-		for (int i = dataArrayList.size() - 1; i > -1; i--) {
-			resArrayList.add(dataArrayList.get(i));
+			for (int i = dataArrayList.size() - 1; i > -1; i--) {
+				resArrayList.add(dataArrayList.get(i));
+			}
+		}else {
+			ArrayList<Integer> cloneArrayList = (ArrayList<Integer>) shortDistantList(endVertex).clone();
+			dataArrayList.add(srcVertex.getIndex());
+			for(int i=srcVertex.getIndex();i>-1;) {
+				dataArrayList.add(cloneArrayList.get(i));
+				i=cloneArrayList.get(i);
+				if(i==endVertex.getIndex()) {
+					break;
+				}
+			}
+			for(int i:dataArrayList) {
+				resArrayList.add(i);
+			}
 		}
 
 		System.out.println(resArrayList.toString());
@@ -457,7 +479,9 @@ public class Graph {
 //		g.dijkstra(v1, v3);
 		System.out.println(g.shortDistantList(v1).toString());
 		System.out.println("-----");
-		System.out.println(g.dijkstra(v2, v7).toString());
+		System.out.println(g.dijkstra(v1, v7).toString());
+		System.out.println("-----");
+		System.out.println(g.dijkstra(v7, v1).toString());
 //		System.out.println(g.getDskInt(2).toString());
 //		System.out.println(v2.getDsKe().toString());
 	}

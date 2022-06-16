@@ -1,20 +1,12 @@
 package Controller;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
-import java.awt.geom.Ellipse2D.Double;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -23,18 +15,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.StringTokenizer;
 
-import javax.print.attribute.standard.Sides;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import model.Edge;
 import model.Vertex;
-import view.ArrowHead;
-import view.Frame;
 import view.PaintPanel;
 import view.ToolBarPanel;
 
@@ -80,20 +66,6 @@ public class GListenter implements ActionListener {
 			toolBarPanel.setEnable();
 		}
 		if (inputString.equals("dFS")) {
-//			paintPanel.resetTraved();
-//			paintPanel.repaint();
-//			String start = JOptionPane.showInputDialog("Nhập điểm bắt đầu");
-//			int Start;
-//			try {
-//				Start = Integer.parseInt(start);
-//			} catch (Exception ex) {
-//				JOptionPane.showMessageDialog(paintPanel, "Vui lòng nhập đúng định dạng");
-//				return;
-//			}
-//
-//			ArrayList<Integer> result = paintPanel.getGraph().dfs(Start);
-//			paintPanel.setTraveled(result);
-//			paintPanel.repaint();
 			paintPanel.resetTraved();
 			paintPanel.repaint();
 			paintPanel.setTypeButtonString("dFS");
@@ -102,18 +74,11 @@ public class GListenter implements ActionListener {
 			paintPanel.resetTraved();
 			paintPanel.repaint();
 			paintPanel.setTypeButtonString("bFS");
-//			String start = JOptionPane.showInputDialog("Nhập điểm bắt đầu");
-//			int Start;
-//			try {
-//				Start = Integer.parseInt(start);
-//
-//			} catch (Exception ex) {
-//				JOptionPane.showMessageDialog(paintPanel, "Vui lòng nhập đúng định dạng");
-//				return;
-//			}
-//			ArrayList<Integer> result = paintPanel.getGraph().bfs(Start);
-//			paintPanel.setTraveled(result);
-//			paintPanel.repaint();
+		}
+		if (inputString.equals("dijkstra")) {
+			paintPanel.resetTraved();
+			paintPanel.repaint();
+			paintPanel.setTypeButtonString("dijkstra");
 		}
 		if (inputString.equals("new")) {
 			paintPanel.getGraph().newFile();
@@ -132,7 +97,12 @@ public class GListenter implements ActionListener {
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
 				System.out.println(file.toString());
-				save(file.getAbsolutePath() + ".txt");
+				String string= file.getAbsolutePath();
+				if(string.endsWith(".txt")) {
+					save(file.getAbsolutePath());
+				}else {
+					save(file.getAbsolutePath() + ".txt");
+				}
 			}
 		}
 		if (inputString.equals("open")) {
@@ -152,8 +122,8 @@ public class GListenter implements ActionListener {
 					for (int i = 0; i < dataArrayList.size() - 1; i++) {
 						Random random = new Random();
 						Dimension dimension = paintPanel.getMaximumSize();
-						int x = random.nextInt(1800);
-						int y = random.nextInt(950);
+						int x = random.nextInt(1700);
+						int y = random.nextInt(850);
 						Ellipse2D ellipse2d = new Ellipse2D.Double(x, y, 50, 50);
 						paintPanel.getGraph().getVertexs().add(new Vertex(i, new ArrayList<>(), ellipse2d, false));
 						paintPanel.repaint();
@@ -181,11 +151,6 @@ public class GListenter implements ActionListener {
 					e2.printStackTrace();
 				}
 			}
-		}
-		if(inputString.equals("dijkstra")) {
-			paintPanel.resetTraved();
-			paintPanel.repaint();
-			paintPanel.setTypeButtonString("dijkstra");
 		}
 	}
 
@@ -240,6 +205,7 @@ public class GListenter implements ActionListener {
 				a1.add(lineArrayList.get(k * (strings.size() - 1) + m));
 			}
 			paintPanel.getGraph().getMtkArrayList().add(a1);
+			paintPanel.getGraph().getMtkData().add(a1);
 		}
 		paintPanel.getGraph().showMtk(paintPanel.getGraph().getMtkArrayList());
 	}

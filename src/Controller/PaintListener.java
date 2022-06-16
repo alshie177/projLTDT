@@ -1,23 +1,13 @@
 package Controller;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Ellipse2D.Double;
-import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
@@ -26,9 +16,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import model.Edge;
-import model.Graph;
 import model.Vertex;
-import view.ArrowHead;
 import view.PaintPanel;
 
 public class PaintListener implements MouseListener, MouseMotionListener {
@@ -112,6 +100,7 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 										paintPanel.getSelected2(), null, value);
 								paintPanel.getEllipse2ds().add(ellipse2d);
 								paintPanel.getvList().add(paintPanel.getSelected1());
+								paintPanel.resetSelected();
 								paintPanel.setSelected1(null);
 								paintPanel.setSelected2(null);
 								isFocus = false;
@@ -119,7 +108,6 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 								paintPanel.setTypeButtonString("");
 								System.out.println("Edge is available");
 								paintPanel.repaint();
-								paintPanel.resetSelected();
 								break;
 							}
 							if (paintPanel.isUndirecred() == true && paintPanel.getSelected1().isExistEdge() == true
@@ -142,12 +130,12 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 										(pointFromPoint2d.getX() + pointToPoint2d.getY()) / 2 + 15,
 										pointToPoint2d.getX(), pointToPoint2d.getY());
 								paintPanel.getCurveArrayList().add(curve2d);
+								paintPanel.resetSelected();
 								paintPanel.setSelected1(null);
 								paintPanel.setSelected2(null);
 								isFocus = false;
 								paintPanel.setTypeButtonString("");
 								paintPanel.repaint();
-								paintPanel.resetSelected();
 								break;
 							}
 							if (paintPanel.isUndirecred() == true) {
@@ -169,12 +157,12 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 									value = Integer.parseInt(valueString);
 								} catch (Exception ex) {
 									JOptionPane.showMessageDialog(paintPanel, "Vui lòng nhập đúng định dạng");
+									paintPanel.resetSelected();
 									paintPanel.setSelected1(null);
 									paintPanel.setSelected2(null);
 									isFocus = false;
 									paintPanel.setTypeButtonString("");
 									paintPanel.repaint();
-									paintPanel.resetSelected();
 									return;
 								}
 								paintPanel.getGraph().addUnderectedEdge(paintPanel.getSelected1(),
@@ -189,6 +177,7 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 										System.out.println(vertex.isExistEdge());
 									}
 								}
+								paintPanel.resetSelected();
 								paintPanel.setSelected1(null);
 								paintPanel.setSelected2(null);
 								isFocus = false;
@@ -197,7 +186,6 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 								System.out.println("Edge is available");
 //								paintPanel.getGraph().showEdge();
 								paintPanel.repaint();
-								paintPanel.resetSelected();
 								break;
 							}
 							if (paintPanel.isDirected() == true
@@ -206,9 +194,9 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 								JOptionPane.showMessageDialog(paintPanel, "Giả Đồ Thị không thuộc Đồ Thị Có Hướng",
 										"Error", JOptionPane.ERROR_MESSAGE);
 								paintPanel.setTypeButtonString("");
+								paintPanel.resetSelected();
 								paintPanel.setSelected1(null);
 								paintPanel.setSelected2(null);
-								paintPanel.resetSelected();
 								break;
 							}
 							if (paintPanel.isDirected() == true && paintPanel.getSelected1().isExistEdge() == true
@@ -256,12 +244,12 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 										(pointFromPoint2d.getX() + pointToPoint2d.getY()) / 2, pointToPoint2d.getX(),
 										pointToPoint2d.getY());
 								paintPanel.getCurveArrayList().add(curve2d);
+								paintPanel.resetSelected();
 								paintPanel.setSelected1(null);
 								paintPanel.setSelected2(null);
 								isFocus = false;
 								paintPanel.setTypeButtonString("");
 								paintPanel.repaint();
-								paintPanel.resetSelected();
 								break;
 							}
 							if (paintPanel.isDirected() == true) {
@@ -282,12 +270,12 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 									value = Integer.parseInt(valueString);
 								} catch (Exception ex) {
 									JOptionPane.showMessageDialog(paintPanel, "Vui lòng nhập đúng định dạng");
+									paintPanel.resetSelected();
 									paintPanel.setSelected1(null);
 									paintPanel.setSelected2(null);
 									isFocus = false;
 									paintPanel.setTypeButtonString("");
 									paintPanel.repaint();
-									paintPanel.resetSelected();
 									return;
 								}
 								paintPanel.getGraph().addDerectedEdge(paintPanel.getSelected1(),
@@ -317,9 +305,9 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 										JOptionPane.ERROR_MESSAGE);
 								System.out.println("Type of Edge is not Check!!!");
 								paintPanel.setTypeButtonString("");
+								paintPanel.resetSelected();
 								paintPanel.setSelected1(null);
 								paintPanel.setSelected2(null);
-								paintPanel.resetSelected();
 								break;
 							}
 						}

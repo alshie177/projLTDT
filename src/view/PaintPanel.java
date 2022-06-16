@@ -7,7 +7,6 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.Taskbar;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
@@ -15,11 +14,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import javax.swing.JPanel;
-import javax.swing.text.StyledEditorKit.ForegroundAction;
 
 import Controller.PaintListener;
 import model.Edge;
@@ -297,13 +292,20 @@ public class PaintPanel extends JPanel {
 	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
 		Graphics2D graphics2d = (Graphics2D) graphics;
+		graphics2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
+				RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
 		graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		graphics2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+		graphics2d.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
+		graphics2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+		graphics2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		graphics2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		graphics2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+
 		for (Vertex v : graph.getVertexs()) {
 			if (v.isTravel()) {
 				graphics2d.setColor(Color.YELLOW);
 				graphics2d.fill(v.getEllipse());
-//				animation();
 			} else {
 				if (v.isSelected()) {
 					graphics2d.setColor(Color.gray);
@@ -325,16 +327,25 @@ public class PaintPanel extends JPanel {
 			graphics2d.setColor(Color.BLACK);
 		}
 		for (Edge edge : graph.getEdges()) {
-			if (edge.getNode1() == edge.getNode2()) {
-			} else {
-				graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				graphics2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-				graphics2d.setColor(Color.BLACK);
+			graphics2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
+					RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+			graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			graphics2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+			graphics2d.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
+			graphics2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+					RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+			graphics2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			graphics2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			graphics2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 				graphics2d.setStroke(new BasicStroke(3f));
 				if (edge.isTravel()) {
 					graphics2d.setColor(Color.orange);
+				}else {
+					graphics2d.setColor(Color.BLACK);
 				}
-				if (isDirected() == true) {
+				if (edge.getNode1() == edge.getNode2()) {
+				} else {
+					if (isDirected() == true) {
 					if (edge.getLine2d() == null) {
 					} else {
 						double from = angleBetween(edge.getNode1(), edge.getNode2());
@@ -386,8 +397,16 @@ public class PaintPanel extends JPanel {
 		}
 
 		for (Edge edge : edges) {
+			graphics2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
+					RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
 			graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			graphics2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+			graphics2d.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
+			graphics2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+					RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+			graphics2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			graphics2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			graphics2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 			graphics2d.setColor(Color.BLACK);
 			graphics2d.setStroke(new BasicStroke(3f));
 			if (isDirected() == true) {
@@ -452,8 +471,16 @@ public class PaintPanel extends JPanel {
 			}
 		}
 		for (Vertex v : vList) {
+			graphics2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
+					RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
 			graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			graphics2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+			graphics2d.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
+			graphics2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+					RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+			graphics2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			graphics2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			graphics2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 			graphics2d.setColor(Color.BLACK);
 			graphics2d.setStroke(new BasicStroke(1.5f));
 			for (Ellipse2D ellipse2d : ellipse2ds) {

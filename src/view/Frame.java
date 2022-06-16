@@ -7,40 +7,37 @@ import java.awt.Panel;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 
-import org.w3c.dom.css.RGBColor;
-
 public class Frame extends JFrame {
-	
+
 	public Frame() {
 		this.init();
 	}
 
 	private void init() {
-		JFrame frame = new JFrame();
-		frame.setTitle("Graph theory");
-		frame.setMinimumSize(new Dimension(870, 500));
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		this.setTitle("Graph theory");
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		this.setMinimumSize(new Dimension(870, 500));
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.pack();
 
 		PaintPanel paint = new PaintPanel();
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		paint.setBorder(blackline);
 		ToolBarPanel toolBarPanel = new ToolBarPanel(paint);
-		
-		frame.setLayout(new BorderLayout());
-		frame.add(toolBarPanel, BorderLayout.NORTH);
-		frame.add(paint, BorderLayout.CENTER);
-		frame.add(new Panel(),BorderLayout.EAST);
-		frame.add(new Panel(),BorderLayout.SOUTH);
-		frame.add(new Panel(),BorderLayout.WEST);
-		frame.pack();
-		frame.setVisible(true);
+
+		this.setLayout(new BorderLayout());
+		this.add(toolBarPanel, BorderLayout.NORTH);
+		this.add(paint, BorderLayout.CENTER);
+		this.add(new Panel(), BorderLayout.EAST);
+		this.add(new Panel(), BorderLayout.SOUTH);
+		this.add(new Panel(), BorderLayout.WEST);
+		this.setVisible(true);
 	}
 
 	public static void main(String[] args) {

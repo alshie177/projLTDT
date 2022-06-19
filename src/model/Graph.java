@@ -193,10 +193,6 @@ public class Graph {
 		return result;
 	}
 
-	public void travel(ArrayList<Integer> arrayList) {
-
-	}
-
 	public ArrayList<Integer> bfs(int start) {
 		ArrayList<ArrayList<Integer>> edgeTo = fillEdgeTo();
 		ArrayList<Boolean> isMarked = fillMark();
@@ -400,10 +396,11 @@ public class Graph {
 		if (endVertex.getIndex() > srcVertex.getIndex()) {
 			ArrayList<Integer> cloneArrayList = (ArrayList<Integer>) shortDistantList(srcVertex).clone();
 			dataArrayList.add(endVertex.getIndex());
-			for (int i = endVertex.getIndex(); i > 0;) {
+			for (int i = endVertex.getIndex(); i >= 0;) {
 				dataArrayList.add(cloneArrayList.get(i));
 				i = cloneArrayList.get(i);
 				if (i == srcVertex.getIndex()) {
+					System.out.println(srcVertex.getIndex());
 					break;
 				}
 			}
@@ -430,59 +427,59 @@ public class Graph {
 		return resArrayList;
 	}
 
-	public static void main(String[] args) {
-		Ellipse2D ellipse2d = new Ellipse2D.Double(1, 1, 11, 11);
-		Vertex v1 = new Vertex(0, new ArrayList<Vertex>(), ellipse2d, false);
-		Vertex v2 = new Vertex(1, new ArrayList<Vertex>(), ellipse2d, false);
-		Vertex v3 = new Vertex(2, new ArrayList<Vertex>(), ellipse2d, false);
-		Vertex v4 = new Vertex(3, new ArrayList<Vertex>(), ellipse2d, false);
-		Vertex v5 = new Vertex(4, new ArrayList<Vertex>(), ellipse2d, false);
-		Vertex v6 = new Vertex(5, new ArrayList<Vertex>(), ellipse2d, false);
-		Vertex v7 = new Vertex(6, new ArrayList<Vertex>(), ellipse2d, false);
-
-		Graph g = new Graph();
-		g.addVertex(ellipse2d);
-		g.addVertex(ellipse2d);
-		g.addVertex(ellipse2d);
-		g.addVertex(ellipse2d);
-		g.addVertex(ellipse2d);
-		g.addVertex(ellipse2d);
-		g.addVertex(ellipse2d);
-		g.addUnderectedEdge(v1, v2, null, 8);
-		g.addUnderectedEdge(v2, v4, null, 1);
-		g.addUnderectedEdge(v2, v3, null, 4);
-		g.addUnderectedEdge(v3, v6, null, 3);
-		g.addUnderectedEdge(v5, v4, null, 5);
-		g.addUnderectedEdge(v5, v6, null, 6);
-		g.addUnderectedEdge(v5, v7, null, 3);
-		g.addUnderectedEdge(v7, v6, null, 5);
-		ArrayList<Integer> a1 = new ArrayList<>();
-		a1.add(1);
-		a1.add(1);
-		a1.add(1);
-		a1.add(0);
-		a1.add(0);
-//		g.showEdge();
-//		g.showMtk(g.mtkArrayList);
-//		g.delVertex(v1);
-//		System.out.println("Column "+g.findColumn(a1));
-//		g.showEdge();
-//		g.showMtk(g.mtkArrayList);
-//		g.delVertex(v2);
+//	public static void main(String[] args) {
+//		Ellipse2D ellipse2d = new Ellipse2D.Double(1, 1, 11, 11);
+//		Vertex v1 = new Vertex(0, new ArrayList<Vertex>(), ellipse2d, false);
+//		Vertex v2 = new Vertex(1, new ArrayList<Vertex>(), ellipse2d, false);
+//		Vertex v3 = new Vertex(2, new ArrayList<Vertex>(), ellipse2d, false);
+//		Vertex v4 = new Vertex(3, new ArrayList<Vertex>(), ellipse2d, false);
+//		Vertex v5 = new Vertex(4, new ArrayList<Vertex>(), ellipse2d, false);
+//		Vertex v6 = new Vertex(5, new ArrayList<Vertex>(), ellipse2d, false);
+//		Vertex v7 = new Vertex(6, new ArrayList<Vertex>(), ellipse2d, false);
+//
+//		Graph g = new Graph();
+//		g.addVertex(ellipse2d);
+//		g.addVertex(ellipse2d);
+//		g.addVertex(ellipse2d);
+//		g.addVertex(ellipse2d);
+//		g.addVertex(ellipse2d);
+//		g.addVertex(ellipse2d);
+//		g.addVertex(ellipse2d);
+//		g.addUnderectedEdge(v1, v2, null, 8);
+//		g.addUnderectedEdge(v2, v4, null, 1);
+//		g.addUnderectedEdge(v2, v3, null, 4);
+//		g.addUnderectedEdge(v3, v6, null, 3);
+//		g.addUnderectedEdge(v5, v4, null, 5);
+//		g.addUnderectedEdge(v5, v6, null, 6);
+//		g.addUnderectedEdge(v5, v7, null, 3);
+//		g.addUnderectedEdge(v7, v6, null, 5);
+//		ArrayList<Integer> a1 = new ArrayList<>();
+//		a1.add(1);
+//		a1.add(1);
+//		a1.add(1);
+//		a1.add(0);
+//		a1.add(0);
 ////		g.showEdge();
-//		g.showMtk(g.mtkArrayList);
-//		g.delVertex(v3);
+////		g.showMtk(g.mtkArrayList);
+////		g.delVertex(v1);
+////		System.out.println("Column "+g.findColumn(a1));
 ////		g.showEdge();
-//		g.showMtk(g.mtkArrayList);
-//		g.bfs(2);
-		System.out.println("-----");
-//		g.dijkstra(v1, v3);
-		System.out.println(g.shortDistantList(v1).toString());
-		System.out.println("-----");
-		System.out.println(g.dijkstra(v1, v7).toString());
-		System.out.println("-----");
-		System.out.println(g.dijkstra(v7, v1).toString());
-//		System.out.println(g.getDskInt(2).toString());
-//		System.out.println(v2.getDsKe().toString());
-	}
+////		g.showMtk(g.mtkArrayList);
+////		g.delVertex(v2);
+//////		g.showEdge();
+////		g.showMtk(g.mtkArrayList);
+////		g.delVertex(v3);
+//////		g.showEdge();
+////		g.showMtk(g.mtkArrayList);
+////		g.bfs(2);
+//		System.out.println("-----");
+////		g.dijkstra(v1, v3);
+//		System.out.println(g.shortDistantList(v1).toString());
+//		System.out.println("-----");
+//		System.out.println(g.dijkstra(v1, v7).toString());
+//		System.out.println("-----");
+//		System.out.println(g.dijkstra(v7, v1).toString());
+////		System.out.println(g.getDskInt(2).toString());
+////		System.out.println(v2.getDsKe().toString());
+//	}
 }

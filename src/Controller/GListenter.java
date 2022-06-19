@@ -212,8 +212,9 @@ public class GListenter implements ActionListener {
 
 	public void addUndirectedEdge(ArrayList<ArrayList<Integer>> mtkArrayList) {
 		for (int i = 0; i < mtkArrayList.size(); i++) {
-			for (int j = 0; j < mtkArrayList.size(); j++) {
+			for (int j = 0; j <=i; j++) {
 				if (mtkArrayList.get(i).get(j) != 0 && mtkArrayList.get(j).get(i) != 0) {
+					System.out.println(i+","+j);
 					double from = paintPanel.angleBetween(paintPanel.getGraph().getVertexs().get(i),
 							paintPanel.getGraph().getVertexs().get(j));
 					double to = paintPanel.angleBetween(paintPanel.getGraph().getVertexs().get(i),

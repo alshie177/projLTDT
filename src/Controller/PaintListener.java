@@ -368,7 +368,9 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 							paintPanel.repaint();
 							ArrayList<Integer> result = paintPanel.getGraph().dijkstra(paintPanel.getSelected1(),
 									paintPanel.getSelected2());
+							System.out.println(result.toString());
 							paintPanel.setTraveled(result);
+							paintPanel.repaint();
 							paintPanel.getSelected1().setSelected(false);
 							paintPanel.getSelected2().setSelected(false);
 							paintPanel.setSelected1(null);
@@ -437,18 +439,6 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 								paintPanel.getCurveArrayList().remove(paintPanel.getCurveArrayList().get(j));
 								paintPanel.getEdges().remove(paintPanel.getEdges().get(i));
 								paintPanel.getGraph().delDirectedEdge(paintPanel.getEdges().get(i));
-								for (Edge edge : paintPanel.getEdges()) {
-									if (edge == paintPanel.getEdges().get(i)) {
-										edge.getNode1().setExistEdge(false);
-										edge.getNode2().setExistEdge(false);
-									}
-								}
-								for (Edge edge : paintPanel.getEdges()) {
-									if (edge == paintPanel.getEdges().get(i)) {
-										edge.getNode1().setExistEdge(false);
-										edge.getNode2().setExistEdge(false);
-									}
-								}
 								paintPanel.getEdges().get(i).getNode1().setExistEdge(false);
 								paintPanel.getEdges().get(i).getNode2().setExistEdge(false);
 								paintPanel.repaint();

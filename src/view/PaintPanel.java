@@ -340,6 +340,8 @@ public class PaintPanel extends JPanel {
 				graphics2d.setStroke(new BasicStroke(3f));
 				if (edge.isTravel()) {
 					graphics2d.setColor(Color.orange);
+//					graphics2d.setStroke(new BasicStroke(7f));
+
 				}else {
 					graphics2d.setColor(Color.BLACK);
 				}
@@ -372,17 +374,17 @@ public class PaintPanel extends JPanel {
 					}
 				}
 				if (isUndirecred() == true) {
-					double from = angleBetween(edge.getNode1(), edge.getNode2());
-					double to = angleBetween(edge.getNode1(), edge.getNode2());
-					Point2D pointFromPoint2d = getPointOnCircle(edge.getNode1(), from);
-					Point2D pointToPoint2d = getPointOnCircle(edge.getNode2(), to - 22);
-					graphics2d.draw(new Line2D.Double(pointFromPoint2d, pointToPoint2d));
-					Font font = new Font("Arial", Font.BOLD, 15);
-					FontMetrics metrics = graphics.getFontMetrics(font);
-					graphics.setFont(font);
-					graphics.setColor(Color.red);
 					if (edge.getLine2d() == null) {
 					} else {
+						double from = angleBetween(edge.getNode1(), edge.getNode2());
+						double to = angleBetween(edge.getNode1(), edge.getNode2());
+						Point2D pointFromPoint2d = getPointOnCircle(edge.getNode1(), from);
+						Point2D pointToPoint2d = getPointOnCircle(edge.getNode2(), to - 22);
+						graphics2d.draw(new Line2D.Double(pointFromPoint2d, pointToPoint2d));
+						Font font = new Font("Arial", Font.BOLD, 15);
+						FontMetrics metrics = graphics.getFontMetrics(font);
+						graphics.setFont(font);
+						graphics.setColor(Color.red);
 						int xString = (int) (pointFromPoint2d.getX() + ((pointToPoint2d.getX()))
 								- metrics.stringWidth(string)) / 2 + 10;
 
@@ -393,7 +395,6 @@ public class PaintPanel extends JPanel {
 
 				}
 			}
-			graphics2d.setColor(Color.BLACK);
 		}
 
 		for (Edge edge : edges) {
@@ -409,6 +410,7 @@ public class PaintPanel extends JPanel {
 			graphics2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 			graphics2d.setColor(Color.BLACK);
 			graphics2d.setStroke(new BasicStroke(3f));
+			
 			if (isDirected() == true) {
 				double from = angleBetween(edge.getNode1(), edge.getNode2());
 				double to = angleBetween(edge.getNode1(), edge.getNode2());

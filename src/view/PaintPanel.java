@@ -1,5 +1,6 @@
 package view;
 
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -14,6 +15,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+
 import javax.swing.JPanel;
 
 import Controller.PaintListener;
@@ -263,31 +265,6 @@ public class PaintPanel extends JPanel {
 
 	int i = 0;
 
-//	public void animation() {
-//		Timer timer = new Timer();
-//		Task task = new Task();
-//		timer.schedule(task, 1000);
-//	}
-//
-//	private class Task extends TimerTask {
-//		Vertex vertex;
-//
-//		public Task() {
-//		}
-//
-//		@Override
-//		public void run() {
-////			for(Vertex vertex:graph.getVertexs()) {
-////				if(vertex.isTravel()) {
-//			Graphics2D graphics2d = (Graphics2D) getGraphics();
-//			graphics2d.setColor(Color.yellow);
-//			if(i<6) graphics2d.fill(graph.getVertexs().get(i).getEllipse());
-//			i++;
-////				}
-////			}
-//		}
-//	}
-
 	@Override
 	public void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
@@ -337,17 +314,17 @@ public class PaintPanel extends JPanel {
 			graphics2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			graphics2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			graphics2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
-				graphics2d.setStroke(new BasicStroke(3f));
-				if (edge.isTravel()) {
-					graphics2d.setColor(Color.orange);
+			graphics2d.setStroke(new BasicStroke(3f));
+			if (edge.isTravel()) {
+				graphics2d.setColor(Color.orange);
 //					graphics2d.setStroke(new BasicStroke(7f));
 
-				}else {
-					graphics2d.setColor(Color.BLACK);
-				}
-				if (edge.getNode1() == edge.getNode2()) {
-				} else {
-					if (isDirected() == true) {
+			} else {
+				graphics2d.setColor(Color.BLACK);
+			}
+			if (edge.getNode1() == edge.getNode2()) {
+			} else {
+				if (isDirected() == true) {
 					if (edge.getLine2d() == null) {
 					} else {
 						double from = angleBetween(edge.getNode1(), edge.getNode2());
@@ -410,7 +387,7 @@ public class PaintPanel extends JPanel {
 			graphics2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 			graphics2d.setColor(Color.BLACK);
 			graphics2d.setStroke(new BasicStroke(3f));
-			
+
 			if (isDirected() == true) {
 				double from = angleBetween(edge.getNode1(), edge.getNode2());
 				double to = angleBetween(edge.getNode1(), edge.getNode2());

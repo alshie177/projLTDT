@@ -301,6 +301,7 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 							}
 							if (paintPanel.isDirected() == false && paintPanel.isUndirecred() == false
 									&& paintPanel.getSelected1() != null && paintPanel.getSelected2() != null) {
+								paintPanel.resetSelected();
 								JOptionPane.showMessageDialog(paintPanel, "Type of Edge is not Check!!!", "Error",
 										JOptionPane.ERROR_MESSAGE);
 								System.out.println("Type of Edge is not Check!!!");
@@ -356,14 +357,12 @@ public class PaintListener implements MouseListener, MouseMotionListener {
 				if (paintPanel.getGraph().getVertexs().get(i).getEllipse().contains(e.getX(), e.getY())) {
 					if (paintPanel.getSelected1() == null) {
 						paintPanel.setSelected1(paintPanel.getGraph().getVertexs().get(i));
-//						System.out.println("1 "+paintPanel.getGraph().getVertexs().get(i).getIndex());
 						paintPanel.getSelected1().setSelected(true);
 						paintPanel.repaint();
 						break;
 					} else {
 						if (paintPanel.getSelected1() != paintPanel.getSelected2()) {
 							paintPanel.setSelected2(paintPanel.getGraph().getVertexs().get(i));
-//							System.out.println("2 "+paintPanel.getGraph().getVertexs().get(i).getIndex());
 							paintPanel.getSelected2().setSelected(true);
 							paintPanel.repaint();
 							ArrayList<Integer> result = paintPanel.getGraph().dijkstra(paintPanel.getSelected1(),

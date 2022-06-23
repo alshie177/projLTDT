@@ -165,7 +165,7 @@ public class Graph {
 	}
 
 	public boolean ke(int x, int y) {
-		return mtkArrayList.get(x).get(y) == 1;
+		return mtkArrayList.get(x).get(y) !=0;
 	}
 
 	public ArrayList<Integer> dfs(int start) {
